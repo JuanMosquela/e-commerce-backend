@@ -7,6 +7,7 @@ import cors from "cors";
 
 import path, { join } from "path";
 import connectDatabase from "./config/db.config.js";
+import corsOptions from "./config/corsOptions.js";
 
 // import Product from "./models/productSchema.js";
 // import products from "./data/products.js";
@@ -16,9 +17,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 connectDatabase();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 // app.use(express.static(join(__dirname, "/frontend/build")));
+app.use("/", (req, res) => {
+  res.json({
+    msg: "welcome",
+  });
+});
 app.use("/api/user", userRouter);
 app.use("/api/product", productsRouter);
 // app.use("/insertProducts", async (req, res) => {
