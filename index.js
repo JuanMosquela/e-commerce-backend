@@ -2,9 +2,9 @@ import express from "express";
 import "dotenv/config.js";
 import userRouter from "./routes/users.js";
 import productsRouter from "./routes/products.js";
+import categoryRouter from "./routes/category.js";
 import authRouter from "./routes/auth.js";
 import cors from "cors";
-
 import path, { join } from "path";
 import connectDatabase from "./config/db.config.js";
 import corsOptions from "./config/corsOptions.js";
@@ -23,6 +23,7 @@ app.use(express.json());
 
 app.use("/api/user", userRouter);
 app.use("/api/product", productsRouter);
+app.use("/api/category", categoryRouter);
 // app.use("/insertProducts", async (req, res) => {
 //   await Product.remove({});
 //   const insertedProducts = await Product.insertMany(products);

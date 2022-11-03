@@ -19,7 +19,7 @@ const addUser = async (req, res) => {
     const salt = bcrypt.genSaltSync();
     user.password = bcrypt.hashSync(password, salt);
 
-    user.save();
+    await user.save();
 
     res.status(200).json({
       user,

@@ -7,7 +7,7 @@ import {
   updateUser,
 } from "../controllers/user.controller.js";
 import { idExist } from "../helpers/db-validators.js";
-import validarCampos from "../middlewares/validar-campos.js";
+import handleErrors from "../middlewares/handleErrors.js";
 import {
   verifyToken,
   verifyTokenAndAdmin,
@@ -31,9 +31,9 @@ router.put(
   "/:id",
   [
     verifyToken,
-    validarCampos,
     check("id", `its not a valid Mongo ID`).isMongoId(),
     check("id").custom(idExist),
+    handleErrors,
   ],
   updateUser
 );

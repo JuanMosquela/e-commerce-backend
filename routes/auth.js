@@ -5,7 +5,7 @@ import {
   nameExist,
   passwordExist,
 } from "../helpers/db-validators.js";
-import validarCampos from "../middlewares/validar-campos.js";
+import handleErrors from "../middlewares/handleErrors.js";
 
 import { addUser, login } from "../controllers/auth.controller.js";
 
@@ -20,7 +20,7 @@ router.post(
     check("name").custom(nameExist),
     check("password", "Password must be 6 digit min").isLength({ min: 6 }),
     check("password").custom(passwordExist),
-    validarCampos,
+    handleErrors,
   ],
   addUser
 );

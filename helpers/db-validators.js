@@ -1,3 +1,4 @@
+import Category from "../models/categorySchema.js";
 import User from "../models/userSchema.js";
 
 // const validRole = async (rol = "") => {
@@ -11,6 +12,13 @@ const idExist = async (id) => {
   const idInDB = await User.findById(id);
   if (!idInDB) {
     throw new Error(`The id ${id} its not valid or dosent exist`);
+  }
+};
+
+const categoryExist = async (name) => {
+  const nameInDB = await Category.findOne({ name });
+  if (nameInDB) {
+    throw new Error(`The email ${name} already exist`);
   }
 };
 
@@ -36,4 +44,4 @@ const nameExist = async (name) => {
   }
 };
 
-export { idExist, nameExist, emailExist, passwordExist };
+export { idExist, nameExist, emailExist, passwordExist, categoryExist };

@@ -7,7 +7,7 @@ import {
   updateProduct,
 } from "../controllers/product.controller.js";
 
-import validarCampos from "../middlewares/validar-campos.js";
+import handleErrors from "../middlewares/handleErrors.js";
 const router = Router();
 
 router.get("/", getAllProducts);
@@ -21,14 +21,14 @@ router.post(
       .isNumeric(),
     check("description", "The description is required").notEmpty(),
 
-    validarCampos,
+    handleErrors,
   ],
   addProduct
 );
 
 router.put(
   "/:id",
-  [check("id", `its not a valid Mongo ID`).isMongoId(), validarCampos],
+  [check("id", `its not a valid Mongo ID`).isMongoId(), handleErrors],
   updateProduct
 );
 
