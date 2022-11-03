@@ -11,35 +11,27 @@ import validarCampos from "../middlewares/validar-campos.js";
 import {
   verifyToken,
   verifyTokenAndAdmin,
-  verifyTokenAndAuthorization,
 } from "../middlewares/verify-token.js";
 const router = Router();
 
 router.get(
   "/:id",
   [
-    // verifyToken,
-    // verifyTokenAndAdmin,
+    verifyToken,
+    verifyTokenAndAdmin,
     check("id", `its not a valid Mongo ID`).isMongoId(),
     check("id").custom(idExist),
   ],
   getUser
 );
 
-router.get(
-  "/",
-  [
-    // verifyToken,
-    // verifyTokenAndAdmin
-  ],
-  getAllUsers
-);
+router.get("/", [verifyToken, verifyTokenAndAdmin], getAllUsers);
 
 router.put(
   "/:id",
   [
-    // verifyToken,
-    // validarCampos,
+    verifyToken,
+    validarCampos,
     check("id", `its not a valid Mongo ID`).isMongoId(),
     check("id").custom(idExist),
   ],
