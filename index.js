@@ -20,11 +20,7 @@ connectDatabase();
 app.use(cors(corsOptions));
 app.use(express.json());
 // app.use(express.static(join(__dirname, "/frontend/build")));
-app.use("/", (req, res) => {
-  res.json({
-    msg: "welcome",
-  });
-});
+
 app.use("/api/user", userRouter);
 app.use("/api/product", productsRouter);
 // app.use("/insertProducts", async (req, res) => {
