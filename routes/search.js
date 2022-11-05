@@ -1,5 +1,6 @@
 import { Router } from "express";
 import mongoose from "mongoose";
+import Category from "../models/categorySchema.js";
 import Product from "../models/productSchema.js";
 import User from "../models/userSchema.js";
 
@@ -52,6 +53,27 @@ const searchProducts = async (term = "", res) => {
   }
 };
 
+const searchCategory = async (term = "", res) => {
+  const isMongoId = mongoose.Types.ObjectId.isValid(term);
+
+  if (isMongoId) {
+    const category = await Category.findById(term);
+    return res.status(200).json({
+      results: category ? category : [],
+    });
+  }
+
+  const regex = new RegExp(term, "i");
+
+  const category = await Category.find({ name: regex });
+
+  if (category) {
+    return res.status(200).json({
+      results: category ? category : [],
+    });
+  }
+};
+
 router.get("/:collection/:term", (req, res) => {
   const { collection, term } = req.params;
 
@@ -70,6 +92,7 @@ router.get("/:collection/:term", (req, res) => {
       break;
 
     case "categories":
+      searchCategory(term, res);
       break;
     default:
       res.status(500).json({
