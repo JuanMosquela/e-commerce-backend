@@ -65,7 +65,7 @@ const searchCategory = async (term = "", res) => {
 
   const regex = new RegExp(term, "i");
 
-  const category = await Category.find({ name: regex });
+  const category = await Category.find({ name: regex, state: true });
 
   if (category) {
     return res.status(200).json({
