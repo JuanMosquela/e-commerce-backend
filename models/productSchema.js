@@ -1,5 +1,4 @@
 import mongoose, { model, Schema } from "mongoose";
-import reviewSchema from "./reviewSchema.js";
 
 const productSchema = new Schema(
   {
@@ -8,37 +7,38 @@ const productSchema = new Schema(
       unique: true,
       required: true,
     },
+    state: {
+      type: Boolean,
+      default: true,
+    },
     pictureURL: {
       type: [String],
-      required: true,
     },
     price: {
       type: Number,
-      unique: false,
       required: true,
     },
     description: {
       type: String,
-      unique: false,
-      required: true,
     },
     stock: {
       type: Number,
-      unique: false,
       required: true,
+      default: 0,
     },
     rating: {
       type: Number,
-      required: true,
       default: 0,
     },
-    reviews: {
-      type: [reviewSchema],
-    },
-    numReviews: {
-      type: Number,
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      default: 0,
+    },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
     },
   },
   { timestamps: true }

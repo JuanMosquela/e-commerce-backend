@@ -1,4 +1,5 @@
 import Category from "../models/categorySchema.js";
+import Product from "../models/productSchema.js";
 import User from "../models/userSchema.js";
 
 // const validRole = async (rol = "") => {
@@ -15,10 +16,24 @@ const idExist = async (id) => {
   }
 };
 
+const productIDExist = async (id) => {
+  const productInDB = await Product.findById(id);
+  if (!productInDB) {
+    throw new Error(`There is no product in the database with this id`);
+  }
+};
+
 const categoryExist = async (name) => {
-  const nameInDB = await Category.findOne({ name });
-  if (nameInDB) {
+  const categoryInDB = await Category.findOne({ name });
+  if (categoryInDB) {
     throw new Error(`The email ${name} already exist`);
+  }
+};
+
+const categoryIDExist = async (id) => {
+  const categoryIDinDB = await Category.findById(id);
+  if (!categoryIDinDB) {
+    throw new Error(`This ${id} is invalid or dosent exist`);
   }
 };
 
@@ -44,4 +59,12 @@ const nameExist = async (name) => {
   }
 };
 
-export { idExist, nameExist, emailExist, passwordExist, categoryExist };
+export {
+  idExist,
+  nameExist,
+  emailExist,
+  passwordExist,
+  categoryExist,
+  categoryIDExist,
+  productIDExist,
+};

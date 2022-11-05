@@ -9,6 +9,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_635541-MLA49129527451_022022-O.webp",
     ],
     stock: 45,
+    category: "zapatillas",
   },
   {
     title: "Zapatillas Capitan Tt Topper",
@@ -22,6 +23,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_677022-MLA49150453314_022022-O.webp",
     ],
     stock: 67,
+    category: "zapatillas",
   },
   {
     title: "Nitro Tech 100% Whey Gold Bonus! 5,51 Lb !! Muscletech",
@@ -34,6 +36,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_712734-MLA49101015544_022022-O.webp",
     ],
     stock: 35,
+    category: "suplementos",
   },
   {
     title: "Standard 100% Isolate",
@@ -45,6 +48,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_769916-MLA46076860804_052021-O.webp",
     ],
     stock: 5,
+    category: "suplementos",
   },
   {
     title: "Plant Whey Protein",
@@ -58,6 +62,7 @@ const products = [
       "https://www.demusculos.com/shop/1637-medium_default/starcuts-plant-protein-glucosa.jpg",
     ],
     stock: 12,
+    category: "suplementos",
   },
   {
     title: "Zapatillas Deportivas Topper Wind Iv Negras",
@@ -71,6 +76,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_748829-MLA50495683172_062022-O.webp",
     ],
     stock: 0,
+    category: "zapatillas",
   },
   {
     title: "Whey Pro 2.0 Nutrilab",
@@ -82,6 +88,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_968328-MLA49946985893_052022-O.webp",
     ],
     stock: 10,
+    category: "suplementos",
   },
   {
     title: "Whey Protein Standard",
@@ -93,6 +100,7 @@ const products = [
       "https://www.farmacialeloir.com.ar/img/articulos/2021/09/ena_whey_x_pro_complex_protein_imagen1.jpg",
     ],
     stock: 7,
+    category: "suplementos",
   },
   {
     title: "Platinum Star Nutrition",
@@ -106,6 +114,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_966972-MLA44462431597_122020-O.webp",
     ],
     stock: 8,
+    category: "suplementos",
   },
   {
     title: "Zapatillas Under Armour Charged Aurora 2 Running",
@@ -118,6 +127,7 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_615567-MLA50174421854_062022-O.webp",
     ],
     stock: 45,
+    category: "zapatillas",
   },
 ];
 

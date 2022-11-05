@@ -1,11 +1,16 @@
 import Product from "../models/productSchema.js";
 
 const getAllProducts = async (req, res) => {
+  const { limit = 5 } = req.query;
+
   try {
-    const products = await Product.find();
+    const [total, products] = await Promise.all([
+      await Product.countDocuments({ state: true }),
+      await Product.find({ state: true }).limit(limit),
+    ]);
 
     res.status(200).json({
-      msg: "products desde el get",
+      total,
       products,
     });
   } catch (error) {
@@ -15,31 +20,41 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+const getProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findById(id)
+      .populate("user", "name")
+      .populate("category", "name");
+
+    res.status(200).json({ product });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
 const addProduct = async (req, res) => {
-  const {
-    title,
-    price,
-    pictureURL,
-    description,
-    stock,
-    rating,
-    reviews,
-    numReviews,
-  } = req.body;
+  const { user, state, ...rest } = req.body;
 
   try {
-    const product = new Product({
-      title,
-      price,
-      pictureURL,
-      description,
-      stock,
-      rating,
-      reviews,
-      numReviews,
-    });
+    const productInDB = await Product.findOne({ title: rest.title });
 
-    product.save();
+    if (productInDB) {
+      return res.status(400).json({
+        msg: `Product ${rest.title} already exist`,
+      });
+    }
+
+    const data = {
+      ...rest,
+      title: rest.title.toLowerCase(),
+      user: req.user._id,
+    };
+
+    const product = new Product(data);
+    await product.save();
 
     res.status(200).json({
       product,
@@ -92,4 +107,4 @@ const removeProduct = async (req, res) => {
   }
 };
 
-export { getAllProducts, addProduct, updateProduct, removeProduct };
+export { getAllProducts, getProduct, addProduct, updateProduct, removeProduct };
