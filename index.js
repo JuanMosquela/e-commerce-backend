@@ -25,7 +25,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);
-app.use("/api/search/", searchRouter);
+app.use("/api/search", searchRouter);
 // app.use("/insertProducts", async (req, res) => {
 //   await Product.remove({});
 //   const insertedProducts = await Product.insertMany(products);
