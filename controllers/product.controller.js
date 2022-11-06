@@ -8,7 +8,6 @@ const getAllProducts = async (req, res) => {
     ]);
 
     res.status(200).json({
-      total,
       products,
     });
   } catch (error) {
@@ -79,7 +78,6 @@ const updateProduct = async (req, res) => {
       stock,
     });
     res.status(200).json({
-      msg: "Product actualizado",
       product,
     });
   } catch (error) {

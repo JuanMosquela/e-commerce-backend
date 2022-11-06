@@ -30,7 +30,6 @@ const getAllUsers = async (req, res) => {
     const users = await User.find({ state: true });
 
     res.status(200).json({
-      msg: "usuarios desde el get",
       users,
     });
   } catch (error) {
@@ -52,9 +51,11 @@ const updateUser = async (req, res) => {
       password,
       pictureURL,
     });
+
+    const { password, ...rest } = user;
+
     res.status(200).json({
-      msg: "User updated",
-      user,
+      ...rest,
     });
   } catch (error) {
     res.status(500).json({
