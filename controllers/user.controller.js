@@ -6,6 +6,12 @@ const getUser = async (req, res) => {
   try {
     const user = await User.findById(id);
 
+    if(!user){
+      return res.status(400).json({
+        msg:`The user with the id: ${id} dont exist `
+      })
+    }
+
     const { password, ...rest } = user;
 
     res.status(200).json({

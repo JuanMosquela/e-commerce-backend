@@ -13,11 +13,11 @@ const reviewSchema = Schema({
     type: String,
     required: true,
   },
-  user: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
+  // user: {
+  //   type: Schema.Types.ObjectId,
+  //   required: true,
+  //   ref: "User",
+  // },
 });
 
 export default reviewSchema;
