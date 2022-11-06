@@ -1,12 +1,10 @@
 import Product from "../models/productSchema.js";
 
 const getAllProducts = async (req, res) => {
-  const { limit = 5 } = req.query;
-
   try {
     const [total, products] = await Promise.all([
       await Product.countDocuments({ state: true }),
-      await Product.find({ state: true }).limit(limit),
+      await Product.find({ state: true }),
     ]);
 
     res.status(200).json({

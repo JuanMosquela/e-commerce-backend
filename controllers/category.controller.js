@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import Category from "../models/categorySchema.js";
 
 const getCategories = async (req, res) => {
-  const { limit = 10 } = req.query;
-  const categories = await Category.find({ state: true }).limit(limit);
+  const categories = await Category.find({ state: true });
 
   res.json({
     categories,
