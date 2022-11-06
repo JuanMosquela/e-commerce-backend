@@ -33,7 +33,7 @@ app.use("/api/search/", searchRouter);
 //     insertedProducts,
 //   });
 // });
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando al puerto ${PORT}`);
