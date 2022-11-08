@@ -19,7 +19,6 @@ router.post(
     check("name", "The name is required").notEmpty(),
     check("name").custom(nameExist),
     check("password", "Password must be 6 digit min").isLength({ min: 6 }),
-    check("password").custom(passwordExist),
     handleErrors,
   ],
   addUser

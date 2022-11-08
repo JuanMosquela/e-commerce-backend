@@ -1,6 +1,7 @@
 import Category from "../models/categorySchema.js";
 import Product from "../models/productSchema.js";
 import User from "../models/userSchema.js";
+import bcrypt from "bcrypt";
 
 // const validRole = async (rol = "") => {
 //   const rolExist = await Role.findOne({ rol });
@@ -38,7 +39,11 @@ const categoryIDExist = async (id) => {
 };
 
 const passwordExist = async (password) => {
-  const passwordInDB = await User.findOne({ password });
+  const user = await User.findOne({ password });
+
+  console.log(user);
+
+  const match = await bcrypt.compare(password, user.password);
 
   if (passwordInDB) {
     throw new Error(`The password alreay exist`);

@@ -18,7 +18,6 @@ const addUser = async (req, res) => {
     //encriptar la contraseña y guardarlo en db
     const salt = bcrypt.genSaltSync();
     user.password = bcrypt.hashSync(password, salt);
-
     await user.save();
 
     res.status(200).json({
