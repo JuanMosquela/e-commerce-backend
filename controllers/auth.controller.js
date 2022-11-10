@@ -6,6 +6,12 @@ const addUser = async (req, res) => {
   const { name, email, password, isAdmin, pictureURL, state } = req.body;
 
   try {
+    const findUser = await User.findOne({ email: req.body.email });
+
+    if (findUser) {
+      return res.status(401).json({ msg: "This user already exist" });
+    }
+
     const user = new User({
       name,
       email,
