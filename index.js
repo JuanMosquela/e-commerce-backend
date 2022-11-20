@@ -26,13 +26,12 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api", searchRouter);
-// app.use("/insertProducts", async (req, res) => {
-//   await Product.deleteMany({});
-//   const insertedProducts = await Product.insertMany(products);
-//   res.json({
-//     insertedProducts,
-//   });
-// });
+app.use("/insertProducts", async (req, res) => {
+  const insertedProducts = await Product.insertMany(products);
+  res.json({
+    insertedProducts,
+  });
+});
 app.use("/api/auth", authRouter);
 
 app.listen(PORT, () => {

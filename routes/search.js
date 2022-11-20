@@ -23,23 +23,19 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/filter/products/", async (req, res) => {
-  const { category = "", branch = "", min = 0, max = 200000 } = req.query;
+  const { category, branch, min, max } = req.query;
 
   console.log(category);
-  const regex = new RegExp(category, "i");
 
   try {
-    const findCategory = await Product.find({ category: regex });
-
     const findProducts = await Product.find({
-      // category: new RegExp(category, "i"),
-      category: regex,
+      category: new RegExp(category, "i"),
+
       $or: [
         {
           $and: [
-            { category },
-            { price: { $gte: Number(min) } },
-            { price: { $lte: Number(max) } },
+            { price: { $gte: Number(min) | 1 } },
+            { price: { $lte: Number(max) || 999999 } },
           ],
         },
       ],
