@@ -4,7 +4,6 @@ const productSchema = new Schema(
   {
     title: {
       type: String,
-      unique: true,
       required: true,
     },
     state: {
@@ -30,16 +29,22 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     category: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
+      type: String,
     },
+    subCategory: {
+      type: Schema.Types.Mixed,
+    },
+    // user: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "User",
+    //   required: true,
+    // },
+    // category: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Category",
+    //   required: true,
+    // },
   },
   { timestamps: true }
 );
