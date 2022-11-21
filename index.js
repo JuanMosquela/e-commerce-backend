@@ -6,10 +6,7 @@ import categoryRouter from "./routes/category.js";
 import authRouter from "./routes/auth.js";
 import searchRouter from "./routes/search.js";
 import cors from "cors";
-import path, { join } from "path";
 import connectDatabase from "./config/db.config.js";
-// import corsOptions from "./config/corsOptions.js";
-
 import Product from "./models/productSchema.js";
 import products from "./data/products.js";
 
@@ -20,12 +17,11 @@ connectDatabase();
 
 app.use(cors());
 app.use(express.json());
-// app.use(express.static(join(__dirname, "/frontend/build")));
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);
-app.use("/api", searchRouter);
+app.use("/api/search", searchRouter);
 app.use("/insertProducts", async (req, res) => {
   const insertedProducts = await Product.insertMany(products);
   res.json({

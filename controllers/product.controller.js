@@ -20,9 +20,9 @@ const getAllProducts = async (req, res) => {
 const getProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await Product.findById(id)
-      .populate("user", "name")
-      .populate("category", "name");
+    const product = await Product.findById(id);
+    // .populate("user", "name")
+    // .populate("category", "name");
 
     res.status(200).json({ product });
   } catch (error) {

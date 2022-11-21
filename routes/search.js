@@ -19,7 +19,11 @@ router.get("/", async (req, res) => {
     res.json({
       findProducts,
     });
-  } catch (error) {}
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
 });
 
 router.get("/filter/products/", async (req, res) => {
