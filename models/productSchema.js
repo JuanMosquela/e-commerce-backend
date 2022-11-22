@@ -1,5 +1,24 @@
 import mongoose, { model, Schema } from "mongoose";
 
+const reviewSchema = Schema({
+  ratings: {
+    type: Number,
+    required: true,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  user: {
+    type: String,
+  },
+  // user: {
+  //   type: Schema.Types.ObjectId,
+  //   required: true,
+  //   ref: "User",
+  // },
+});
+
 const productSchema = new Schema(
   {
     title: {
@@ -32,19 +51,18 @@ const productSchema = new Schema(
     category: {
       type: String,
     },
+    branch: {
+      type: String,
+      required: true,
+    },
     subCategory: {
       type: Schema.Types.Mixed,
     },
-    // user: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
-    // category: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Category",
-    //   required: true,
-    // },
+    numReviews: {
+      type: Number,
+      default: 0,
+    },
+    reviews: [reviewSchema],
   },
   { timestamps: true }
 );

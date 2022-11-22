@@ -103,4 +103,62 @@ const removeProduct = async (req, res) => {
   }
 };
 
-export { getAllProducts, getProduct, addProduct, updateProduct, removeProduct };
+const getProductReviews = async (req, res) => {
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+
+  console.log(product.reviews);
+
+  const productReviews = product.reviews;
+
+  res.json({
+    productReviews,
+  });
+};
+
+const addReview = async (req, res) => {
+  const { id } = req.params;
+  const { user, comment, value } = req.body;
+  console.log(id);
+
+  const review = {
+    user,
+    ratings: value,
+    comment: comment,
+  };
+
+  const product = await Product.findById(id);
+
+  const productReviewed = product.reviews.find((review) => {
+    return review.user === user;
+  });
+
+  if (productReviewed) {
+    return res.status(501).json({
+      msg: "Product already reviewed",
+    });
+  } else {
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
+    product.rating =
+      product.reviews.reduce((acc, review) => review.ratings + acc, 0) /
+      product.reviews.length;
+  }
+
+  await product.save();
+
+  res.json({
+    product,
+  });
+};
+
+export {
+  getAllProducts,
+  getProduct,
+  addProduct,
+  updateProduct,
+  removeProduct,
+  addReview,
+  getProductReviews,
+};

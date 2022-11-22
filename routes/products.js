@@ -2,8 +2,10 @@ import { Router } from "express";
 import { check } from "express-validator";
 import {
   addProduct,
+  addReview,
   getAllProducts,
   getProduct,
+  getProductReviews,
   removeProduct,
   updateProduct,
 } from "../controllers/product.controller.js";
@@ -23,8 +25,6 @@ router.get(
   [check("id").isMongoId(), check("id").custom(productIDExist), handleErrors],
   getProduct
 );
-
-
 
 router.post(
   "/",
@@ -60,5 +60,11 @@ router.delete(
   ],
   removeProduct
 );
+
+//buscar reviews de un producto
+
+router.get("/reviews/:id", getProductReviews);
+
+router.put("/reviews/:id", addReview);
 
 export default router;

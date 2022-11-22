@@ -11,6 +11,7 @@ const products = [
     stock: 45,
     category: "zapatillas",
     branch: "Nike",
+    rating: 0,
     subCategory: {
       genero: "Hombre",
       funcion: "Correr",
@@ -18,6 +19,7 @@ const products = [
       beneficios: "Amortiguación",
       caña: "Baja",
       ajuste: "Con Cordones",
+
       importante:
         "El peso del calzado puede variar según el número solicitado. Los talles corresponden a numeración de Argentina",
       garantía: "Contra defecto de fabricación",
@@ -27,7 +29,7 @@ const products = [
   },
   {
     title: "Zapatillas Nike Zoom Winflo 8 Shield",
-    price: 46.799,
+    price: 46.99,
     description:
       "Las Zapatillas Nike Zoom Winflo 8 Shield aportan amortiguación y estabilidad en partes iguales. La unidad Air Zoom amortigua tus pisadas y brinda una máxima comodidad a la hora de cada carrera, reduciendo la posibilidad de lesiones y dolores. La tracción de la suela inspirada en neumáticos resiste a diversas superficies, incluso calles mojadas y húmedas; el patrón Storm Tread asegura esta estabilidad. La capellada y la lengüeta con refuerzos mantienen el agua alejada de tus pies para mantenerte fresco durante más tiempo. Su estilo inconfundible es fácil de combinar con todos tus outfits y versátil para que puedas ir de las pistas a cualquier lugar.",
     pictureURL: [
@@ -39,6 +41,7 @@ const products = [
     stock: 25,
     category: "zapatillas",
     branch: "Nike",
+    rating: 0,
     subCategory: {
       genero: "Hombre",
       funcion: "Correr",
@@ -55,7 +58,7 @@ const products = [
   },
   {
     title: "Zapatillas Nike Air Zoom Pegasus 38",
-    price: 39.999,
+    price: 39.99,
     description:
       "Las Zapatillas Nike Air Zoom Pegasus 38 no son otra cosa que una de las zapatillas más destacadas del mundo del running. Su mejorada mediasuela Nike React más elástica, ligera y con más espuma con menor volumen te brinda una amortiguación superadora; se ajustó la unidad Zoom Air de la puntera para que tengas una sensación más suave y mejor rebote en cada pisada, reubicada cerca al pie para darte una respuesta inmediata. Su correa en el medio pie te da un ajuste más seguro, además, su suela de goma confeccionada en material Nike Grind aporta tracción y las vuelve fundamentales para runners amateurs que quieran hacer de su jornada de entrenamiento, una de placer.",
     pictureURL: [
@@ -67,6 +70,7 @@ const products = [
     stock: 32,
     category: "zapatillas",
     branch: "Nike",
+    rating: 0,
     subCategory: {
       genero: "Mujer",
       funcion: "Correr",
@@ -83,7 +87,7 @@ const products = [
   },
   {
     title: "Botinero Dribbling Classic",
-    price: 2.299,
+    price: 22.99,
     description:
       "Las Zapatillas Nike Air Zoom Pegasus 38 no son otra cosa que una de las zapatillas más destacadas del mundo del running. Su mejorada mediasuela Nike React más elástica, ligera y con más espuma con menor volumen te brinda una amortiguación superadora; se ajustó la unidad Zoom Air de la puntera para que tengas una sensación más suave y mejor rebote en cada pisada, reubicada cerca al pie para darte una respuesta inmediata. Su correa en el medio pie te da un ajuste más seguro, además, su suela de goma confeccionada en material Nike Grind aporta tracción y las vuelve fundamentales para runners amateurs que quieran hacer de su jornada de entrenamiento, una de placer.",
     pictureURL: [
@@ -95,6 +99,7 @@ const products = [
     stock: 32,
     category: "zapatillas",
     branch: "Dribbling",
+    rating: 0,
     subCategory: {
       genero: "Unisex",
       funcion: "Competencia",
@@ -109,7 +114,7 @@ const products = [
   },
   {
     title: "Botinero Dribbling Classic Blue",
-    price: 2.299,
+    price: 22.99,
     description:
       "El Botinero Dribbling Classic es muy versátil y cómodo, protege los botines y los separa del resto del uniforme. Incorpora una manija de mano para llevarlo a todos lados, a un partido, a entrenar o simplemente en tu día a día. Es muy espacioso para guardar lo que necesitas para afrontar el próximo partido. Está confeccionado en tela bagún muy duradera y resistente al desgaste. Todo listo para salir a la cancha.",
     pictureURL: [
@@ -121,6 +126,7 @@ const products = [
     stock: 62,
     category: "bolsos",
     branch: "Dribbling",
+    rating: 0,
     subCategory: {
       genero: "Unisex",
       funcion: "Competencia",
@@ -135,7 +141,7 @@ const products = [
   },
   {
     title: "Botinero Gilbert Club Boot",
-    price: 4.699,
+    price: 46.99,
     description:
       "El botinero Gilbert Club Boot está compuesto de poliéster y es un aliado a la hora de llevar tus botines al club. Su apertura con cierre frontal completo te brinda una mayor comodidad, mientras que su calce es óptimo para que puedas incluir un par de medias o algún accesorio extra.",
     pictureURL: [
@@ -147,6 +153,7 @@ const products = [
     stock: 40,
     category: "bolsos",
     branch: "Gilbert",
+    rating: 0,
     subCategory: {
       genero: "Unisex",
       funcion: "Entrenamiento",
@@ -160,7 +167,7 @@ const products = [
   },
   {
     title: "Mochila Puma Beta",
-    price: 7.999,
+    price: 79.99,
     description:
       "Todo lo que necesitás y mucho más, lo vas a poder llevar en la Mochila Puma Beta. Cuenta con un compartimento muy amplio para llevar tus cosas al gimnasio o a la oficina y dos de malla laterales para tu botella o vaso térmico. Su diseño en gráficos estampados y con inscripciones de la marca te dan un look moderno para combinar con tu outfit.",
     pictureURL: [
@@ -172,6 +179,7 @@ const products = [
     stock: 40,
     category: "bolsos",
     branch: "Puma",
+    rating: 0,
     subCategory: {
       genero: "Unisex",
       funcion: "Entrenamiento",
@@ -185,7 +193,7 @@ const products = [
   },
   {
     title: "Riñonera Puma Core Up",
-    price: 6.699,
+    price: 6.99,
     description:
       "Completá tu outfit con la Riñonera Puma Core Up, un accesorio muy funcional además de moderno. Alargada y con una correa larga que te permite usarla cruzada. Cuenta con un compartimento principal muy amplio para que lleves todo lo necesario para afrontar tu día y uno atrás para cosas que necesitás tener más seguras y al alcance rápido. Su confección en sintético simil cuero y la estampa Puma en el frente es todo lo que necesita tu look.",
     pictureURL: [
@@ -197,6 +205,7 @@ const products = [
     stock: 72,
     category: "accesorios",
     branch: "Puma",
+    rating: 0,
     subCategory: {
       genero: "Mujer",
       funcion: "Cargar",
@@ -210,7 +219,7 @@ const products = [
   },
   {
     title: "Cinturón Under Armour Braided Golf Belt",
-    price: 15.999,
+    price: 15.99,
     description:
       "El Cinturón Under Armour Braided Golf Belt te da la flexibilidad que necesitás en el campo de golf o si lo prefieres en tus outfits casuales. Su hebilla con cierre de metal abre y cierra fácilmente y es ajustable a tu cuerpo para que te sientas cómodo mientras lo lleves puesto.",
     pictureURL: [
@@ -222,6 +231,7 @@ const products = [
     stock: 72,
     category: "accesorios",
     branch: "Under Armor",
+    rating: 0,
     subCategory: {
       genero: "Mujer",
       funcion: "Competecia",
@@ -235,7 +245,7 @@ const products = [
   },
   {
     title: "Riñonera Puma Training",
-    price: 5.999,
+    price: 5.99,
     description:
       "Completá tu outfit con la Riñonera Puma Core Up, un accesorio muy funcional además de moderno. Alargada y con una correa larga que te permite usarla cruzada. Cuenta con un compartimento principal muy amplio para que lleves todo lo necesario para afrontar tu día y uno atrás para cosas que necesitás tener más seguras y al alcance rápido. Su confección en sintético simil cuero y la estampa Puma en el frente es todo lo que necesita tu look.",
     pictureURL: [
@@ -247,6 +257,7 @@ const products = [
     stock: 72,
     category: "accesorios",
     branch: "Puma",
+    rating: 0,
     subCategory: {
       genero: "Mujer",
       funcion: "Cargar",
@@ -260,7 +271,7 @@ const products = [
   },
   {
     title: "Bolso M-Wave Al Cuadro Bajo Asiento",
-    price: 3.299,
+    price: 32.99,
     description:
       "El Bolso M-Wave Al Cuadro Bajo Asiento tiene un diseño práctico y ligero para que puedas llevarlo en tu bicicleta evitando molestias. Podes guardar lo indispensable en el y asegurar el ajuste con las tiras resistente con velcro. Cuenta con un detalle reflectivo para que salgas tranquilo a cualquier hora del día.",
     pictureURL: [
@@ -270,6 +281,7 @@ const products = [
     stock: 62,
     category: "bolsos",
     branch: "M-Wave",
+    rating: 0,
     subCategory: {
       genero: "Unisex",
       funcion: "Ciclismo",
@@ -283,7 +295,7 @@ const products = [
   },
   {
     title: "Zapatillas Capitan Tt Topper",
-    price: 13.055,
+    price: 130.99,
     description:
       "Ideales para tu look urbano, cool y atemporal, las Capitan TT, son un clásico de Topper para todos los nostálgicos. Capellada de microfibra de alta calidad. Suela de goma moldeada con propiedades antideslizantes.",
     pictureURL: [
@@ -295,6 +307,7 @@ const products = [
     stock: 67,
     category: "zapatillas",
     branch: "Dribbling",
+    rating: 0,
     subCategory: {
       genero: "Unisex",
       funcion: "Competencia",
@@ -320,6 +333,7 @@ const products = [
     stock: 35,
     category: "suplementos",
     branch: "Muscletech",
+    rating: 0,
     subCategory: {
       funcion: "Suplementar",
       procedencia: "Animal",
@@ -342,6 +356,7 @@ const products = [
     stock: 5,
     category: "suplementos",
     branch: "ENA Sport",
+    rating: 0,
     subCategory: {
       funcion: "Suplementar",
       procedencia: "Animal",
@@ -366,6 +381,7 @@ const products = [
     stock: 12,
     category: "suplementos",
     branch: "ENA Sport",
+    rating: 0,
     subCategory: {
       funcion: "Suplementar",
       procedencia: "Vegetal",
@@ -378,7 +394,7 @@ const products = [
   },
   {
     title: "Zapatillas Deportivas Topper Wind Iv Negras",
-    price: 14.09,
+    price: 140.09,
     description:
       "Entera de mesh, con refuerzos en puntera, caña y talonera para mayor estabilidad y durabilidad. Serigrafía y frecuencia a lo largo del calzado para mayor visibilidad. - Suela: Entre suela de EVA para reducir la presión y mejorar la absorción del impacto. Insertos de goma resistentes a la abrasión y adherente a todas las superficies. - Ajuste: De cordones..",
     pictureURL: [
@@ -390,6 +406,7 @@ const products = [
     stock: 0,
     category: "zapatillas",
     branch: "Topper",
+    rating: 0,
 
     subCategory: {
       genero: "Unisex",
@@ -414,6 +431,7 @@ const products = [
     stock: 10,
     category: "suplementos",
     branch: "Nutrilab",
+    rating: 0,
     subCategory: {
       funcion: "Suplementar",
       procedencia: "Animal",
@@ -436,6 +454,7 @@ const products = [
     stock: 7,
     category: "suplementos",
     branch: "ENA Sport",
+    rating: 0,
     subCategory: {
       funcion: "Suplementar",
       procedencia: "Animal",
@@ -457,9 +476,10 @@ const products = [
       "https://http2.mlstatic.com/D_NQ_NP_924626-MLA32884396998_112019-O.webp",
       "https://http2.mlstatic.com/D_NQ_NP_966972-MLA44462431597_122020-O.webp",
     ],
-    stock: 8,
+    rating: 0,
     category: "suplementos",
     branch: "ENA Sport",
+    rating: 4.5,
     subCategory: {
       funcion: "Suplementar",
       procedencia: "Animal",
@@ -472,7 +492,7 @@ const products = [
   },
   {
     title: "Zapatillas Under Armour Charged Aurora 2 Running",
-    price: 12.055,
+    price: 120.99,
     description:
       "Parte superior de malla ligera y tanspirable, platilla de espuma, mediasuela de doble densidadm suela esteriuor de goma.",
     pictureURL: [
@@ -484,6 +504,7 @@ const products = [
     stock: 45,
     category: "zapatillas",
     branch: "Aurora",
+    rating: 0,
 
     subCategory: {
       genero: "Unisex",
