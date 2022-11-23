@@ -1,23 +1,21 @@
 import mongoose, { model, Schema } from "mongoose";
 
-const reviewSchema = Schema({
-  ratings: {
-    type: Number,
-    required: true,
+const reviewSchema = Schema(
+  {
+    ratings: {
+      type: Number,
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: String,
+    },
   },
-  comment: {
-    type: String,
-    required: true,
-  },
-  user: {
-    type: String,
-  },
-  // user: {
-  //   type: Schema.Types.ObjectId,
-  //   required: true,
-  //   ref: "User",
-  // },
-});
+  { timestamps: true }
+);
 
 const productSchema = new Schema(
   {
