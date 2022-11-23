@@ -131,27 +131,21 @@ const addReview = async (req, res) => {
 
   const product = await Product.findById(id);
 
-  // const productReviewed = product.reviews.find((review) => {
-  //   return review.user === user;
-  // });
+  const productReviewed = product.reviews.find((review) => {
+    return review.user === user;
+  });
 
-  // if (productReviewed) {
-  //   return res.status(501).json({
-  //     msg: "Product already reviewed",
-  //   });
-  // } else {
-  //   product.reviews.push(review);
-  //   product.numReviews = product.reviews.length;
-  //   product.rating =
-  //     product.reviews.reduce((acc, review) => review.ratings + acc, 0) /
-  //     product.reviews.length;
-  // }
-
-  product.reviews.push(review);
-  product.numReviews = product.reviews.length;
-  product.rating =
-    product.reviews.reduce((acc, review) => review.ratings + acc, 0) /
-    product.reviews.length;
+  if (productReviewed) {
+    return res.status(501).json({
+      msg: "Product already reviewed",
+    });
+  } else {
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
+    product.rating =
+      product.reviews.reduce((acc, review) => review.ratings + acc, 0) /
+      product.reviews.length;
+  }
 
   await product.save();
 

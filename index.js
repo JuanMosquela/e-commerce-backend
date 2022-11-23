@@ -9,14 +9,30 @@ import cors from "cors";
 import connectDatabase from "./config/db.config.js";
 import Product from "./models/productSchema.js";
 import products from "./data/products.js";
+import cookieSession from "cookie-session";
+import passport from "passport";
+import passportSetup from "./config/passport.js";
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 connectDatabase();
 
+// middlewares
+
 app.use(cors());
 app.use(express.json());
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["juan"],
+    maxAge: 24 * 60 * 60 * 100,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// routes
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productsRouter);
