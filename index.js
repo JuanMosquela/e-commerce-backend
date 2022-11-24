@@ -11,7 +11,7 @@ import Product from "./models/productSchema.js";
 import products from "./data/products.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
-import passportSetup from "./config/passport.js";
+// import passportSetup from "./passport.js";
 
 const app = express();
 

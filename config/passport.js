@@ -1,12 +1,12 @@
-import GoogleStrategy from "passport-google-oauth20";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import passport from "passport";
 
 passport.use(
-  new GoogleStrategy.Strategy(
+  new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_KEY_ID,
       clientSecret: process.env.GOOGLE_SECRET_KEY,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "/auth/google",
       scope: ["profile", "email"],
     },
     function (accessToken, refreshToken, profile, callback) {
