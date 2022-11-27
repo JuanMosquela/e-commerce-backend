@@ -6,6 +6,9 @@ const userSchema = new Schema(
       type: String,
       required: [true, "The user name is required"],
     },
+    lastname: {
+      type: String,
+    },
     email: {
       type: String,
       required: [true, "The email is required"],
@@ -16,7 +19,7 @@ const userSchema = new Schema(
       required: [true, "The password is requied"],
       unique: true,
     },
-    pictureURL: {
+    picture: {
       type: String,
     },
     isAdmin: {
