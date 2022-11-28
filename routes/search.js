@@ -28,6 +28,7 @@ router.get("/", async (req, res) => {
 
 router.get("/products/", async (req, res) => {
   const { category, branch, min, max, rating } = req.query;
+  console.log(req.query);
 
   try {
     const findProducts = await Product.find({
@@ -46,7 +47,7 @@ router.get("/products/", async (req, res) => {
     });
 
     res.json({
-      products,
+      findProducts,
     });
   } catch (error) {}
 });
