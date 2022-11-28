@@ -26,14 +26,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/filter/products/", async (req, res) => {
-  const { category, branch, min, max } = req.query;
-
-  console.log(category);
+router.get("/products/", async (req, res) => {
+  const { category, branch, min, max, rating } = req.query;
 
   try {
     const findProducts = await Product.find({
       category: new RegExp(category, "i"),
+      branch: new RegExp(branch, "i"),
+      rating,
 
       $or: [
         {
@@ -46,7 +46,7 @@ router.get("/filter/products/", async (req, res) => {
     });
 
     res.json({
-      findProducts,
+      products,
     });
   } catch (error) {}
 });
