@@ -80,4 +80,27 @@ const removeUser = async (req, res) => {
   }
 };
 
-export { getUser, getAllUsers, updateUser, removeUser };
+const getUserFavorites = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      res.status(400).json({
+        msg: "No se encontro el usuario",
+      });
+    }
+
+    const favProducts = user.favorites;
+
+    res.status(200).json({
+      result: favProducts,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+export { getUser, getAllUsers, updateUser, removeUser, getUserFavorites };

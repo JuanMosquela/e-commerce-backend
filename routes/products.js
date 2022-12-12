@@ -6,6 +6,7 @@ import {
   getAllProducts,
   getProduct,
   getProductReviews,
+  getTopRatedProducts,
   removeProduct,
   updateProduct,
 } from "../controllers/product.controller.js";
@@ -19,6 +20,8 @@ import {
 const router = Router();
 
 router.get("/", getAllProducts);
+
+router.get("/rated", getTopRatedProducts);
 
 router.get(
   "/:id",

@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+import { productSchema } from "./productSchema.js";
 
 const userSchema = new Schema(
   {
@@ -30,6 +31,9 @@ const userSchema = new Schema(
     state: {
       type: Boolean,
       default: true,
+    },
+    favorites: {
+      type: [productSchema],
     },
   },
   { timestamps: true }

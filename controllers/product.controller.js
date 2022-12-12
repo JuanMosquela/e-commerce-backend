@@ -117,6 +117,20 @@ const getProductReviews = async (req, res) => {
   });
 };
 
+const getTopRatedProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ rating: 5 });
+
+    res.status(200).json({
+      results: products,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
 const addReview = async (req, res) => {
   const { id } = req.params;
   const { user, comment, value } = req.body;
@@ -162,4 +176,5 @@ export {
   removeProduct,
   addReview,
   getProductReviews,
+  getTopRatedProducts,
 };

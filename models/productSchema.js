@@ -17,7 +17,7 @@ const reviewSchema = Schema(
   { timestamps: true }
 );
 
-const productSchema = new Schema(
+export const productSchema = new Schema(
   {
     title: {
       type: String,

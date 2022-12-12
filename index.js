@@ -5,6 +5,7 @@ import productsRouter from "./routes/products.js";
 import categoryRouter from "./routes/category.js";
 import authRouter from "./routes/auth.js";
 import searchRouter from "./routes/search.js";
+import favoriteRouter from "./routes/favorite.js";
 import cors from "cors";
 import connectDatabase from "./config/db.config.js";
 import Product from "./models/productSchema.js";
@@ -38,6 +39,7 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/search", searchRouter);
+app.use("/api/favorites", favoriteRouter);
 app.use("/insertProducts", async (req, res) => {
   const insertedProducts = await Product.insertMany(products);
   res.json({
