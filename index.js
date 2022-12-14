@@ -10,8 +10,10 @@ import cors from "cors";
 import connectDatabase from "./config/db.config.js";
 import Product from "./models/productSchema.js";
 import products from "./data/products.js";
+import uploadRouter from "./routes/upload.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
+import fileUpload from "express-fileupload";
 // import passportSetup from "./passport.js";
 
 const app = express();
@@ -32,6 +34,13 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+    createParentPath: true,
+  })
+);
 
 // routes
 
@@ -40,6 +49,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/favorites", favoriteRouter);
+app.use("/api/uploads", uploadRouter);
 app.use("/insertProducts", async (req, res) => {
   const insertedProducts = await Product.insertMany(products);
   res.json({

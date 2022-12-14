@@ -64,6 +64,17 @@ const nameExist = async (name) => {
   }
 };
 
+const validCollections = (collection = "", collections = []) => {
+  const validCollection = collections.includes(collection);
+
+  if (!validCollection) {
+    throw new Error(
+      `La collecion ${collection} no es permitida, ${collections}`
+    );
+  }
+  return true;
+};
+
 export {
   idExist,
   nameExist,
@@ -72,4 +83,5 @@ export {
   categoryExist,
   categoryIDExist,
   productIDExist,
+  validCollections,
 };
