@@ -3,6 +3,7 @@ import { check } from "express-validator";
 import {
   getFile,
   modifyFile,
+  modifyFileCloudinary,
   uploadFile,
 } from "../controllers/upload.controller.js";
 import { validCollections } from "../helpers/db-validators.js";
@@ -35,7 +36,7 @@ router.put(
     ),
     handleErrors,
   ],
-  modifyFile
+  modifyFileCloudinary
 );
 
 export default router;

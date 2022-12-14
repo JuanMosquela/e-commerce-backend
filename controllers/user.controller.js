@@ -2,7 +2,7 @@ import User from "../models/userSchema.js";
 
 const getUser = async (req, res) => {
   const { id } = req.params;
-  const { authenticatedUser } = req.user;
+
   try {
     const user = await User.findById(id);
 
@@ -16,7 +16,6 @@ const getUser = async (req, res) => {
 
     res.status(200).json({
       rest,
-      authenticatedUser,
     });
   } catch (error) {
     res.status(400).json({
