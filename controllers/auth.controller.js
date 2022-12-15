@@ -115,7 +115,7 @@ const signInUser = async (req, res) => {
       const { password, ...rest } = user._doc;
 
       res.status(200).json({
-        ...rest,
+        user: rest,
         token: generateToken(user._id),
       });
     } catch (error) {
