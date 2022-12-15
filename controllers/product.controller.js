@@ -140,8 +140,7 @@ const addReview = async (req, res) => {
     ratings: value,
     comment: comment,
   };
-
-  console.log(review);
+ 
 
   const product = await Product.findById(id);
 

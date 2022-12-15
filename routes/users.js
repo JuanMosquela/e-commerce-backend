@@ -18,7 +18,7 @@ router.get(
   "/:id",
   [
     verifyToken,
-    verifyTokenAndAdmin,
+
     check("id", `its not a valid Mongo ID`).isMongoId(),
     check("id").custom(idExist),
   ],
