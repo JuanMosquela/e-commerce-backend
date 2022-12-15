@@ -112,7 +112,7 @@ const modifyFileCloudinary = async (req, res) => {
     cloudinary.uploader.destroy(public_id);
   }
 
-  const { tempFilePath } = req.files.picture;
+  const { tempFilePath } = req.files.file;
 
   const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
 
