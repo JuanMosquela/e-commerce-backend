@@ -41,20 +41,20 @@ const getAllUsers = async (req, res) => {
 const updateUser = async (req, res) => {
   const { id } = req.params;
 
-  const { name, email, pictureURL, password } = req.body;
+  const { name, email } = req.body;
 
   try {
     const user = await User.findByIdAndUpdate(id, {
       name,
       email,
-      password,
-      pictureURL,
     });
 
-    const { password, ...rest } = user;
+    const updatedUser = await user.save();
+
+    const { password, ...rest } = updatedUser._doc;
 
     res.status(200).json({
-      ...rest,
+      user: rest,
     });
   } catch (error) {
     res.status(500).json({
