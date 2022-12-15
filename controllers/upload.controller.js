@@ -122,7 +122,7 @@ const modifyFileCloudinary = async (req, res) => {
 
   await model.save();
 
-  res.json({
+  res.status(200).json({
     model,
   });
 };
