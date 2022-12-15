@@ -44,17 +44,17 @@ const updateUser = async (req, res) => {
   const { name, email } = req.body;
 
   try {
-    const user = await User.findByIdAndUpdate(id, {
-      name,
-      email,
-    });
-
-    const updatedUser = await user.save();
-
-    const { password, ...rest } = updatedUser._doc;
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        name,
+        email,
+      },
+      { new: true }
+    );
 
     res.status(200).json({
-      user: rest,
+      user,
     });
   } catch (error) {
     res.status(500).json({
