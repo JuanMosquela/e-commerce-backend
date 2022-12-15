@@ -12,10 +12,10 @@ const getUser = async (req, res) => {
       });
     }
 
-    const { password, ...rest } = user;
+    const { password, ...rest } = user._doc;
 
     res.status(200).json({
-      rest,
+      user: rest,
     });
   } catch (error) {
     res.status(400).json({
