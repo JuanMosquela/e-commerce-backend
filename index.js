@@ -14,6 +14,7 @@ import uploadRouter from "./routes/upload.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
 import fileUpload from "express-fileupload";
+
 // import passportSetup from "./passport.js";
 
 const app = express();
@@ -25,6 +26,7 @@ connectDatabase();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(
   cookieSession({
     name: "session",
