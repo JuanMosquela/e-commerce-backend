@@ -3,11 +3,12 @@ import path, { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import Product from "../models/productSchema.js";
 import User from "../models/userSchema.js";
-import cloudinaryModule from "cloudinary";
-const cloudinary = cloudinaryModule.v2;
-cloudinary.config(process.env.CLOUDINARY_URL);
+// import cloudinaryModule from "cloudinary";
+// const cloudinary = cloudinaryModule.v2;
+// cloudinary.config(process.env.CLOUDINARY_URL);
 
 import fs from "fs";
+import cloudinary from "../config/cloudinary-config.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

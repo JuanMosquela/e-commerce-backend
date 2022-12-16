@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary-config.js";
 import Product from "../models/productSchema.js";
 
 const getAllProducts = async (req, res) => {
@@ -33,29 +34,39 @@ const getProduct = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-  const { user, state, ...rest } = req.body;
+  const { title, category, brand, stock, description, picture, price } =
+    req.body;
 
   try {
-    const productInDB = await Product.findOne({ title: rest.title });
+    const productInDB = await Product.findOne({ title });
 
     if (productInDB) {
       return res.status(400).json({
-        msg: `Product ${rest.title} already exist`,
+        msg: `Product ${title} already exist`,
       });
     }
 
-    const data = {
-      ...rest,
-      title: rest.title.toLowerCase(),
-      user: req.user._id,
-    };
+    if (picture) {
+      const uploadRes = await cloudinary.uploader.upload(picture, {
+        upload_preset: "online-shop",
+      });
 
-    const product = new Product(data);
-    await product.save();
+      if (uploadRes) {
+        const product = new Product({
+          title,
+          brand,
+          price,
+          stock,
+          category,
+          description,
+          pictureURL: uploadRes,
+        });
 
-    res.status(200).json({
-      product,
-    });
+        const savedProduct = await product.save();
+
+        res.status(200).json(savedProduct);
+      }
+    }
   } catch (error) {
     res.status(400).json({
       error,
@@ -70,13 +81,17 @@ const updateProduct = async (req, res) => {
 
   console.log(id);
   try {
-    const product = await Product.findByIdAndUpdate(id, {
-      title,
-      price,
-      pictureURL,
-      description,
-      stock,
-    });
+    const product = await Product.findByIdAndUpdate(
+      id,
+      {
+        title,
+        price,
+        pictureURL,
+        description,
+        stock,
+      },
+      { new: true }
+    );
     res.status(200).json({
       product,
     });
@@ -140,7 +155,6 @@ const addReview = async (req, res) => {
     ratings: value,
     comment: comment,
   };
- 
 
   const product = await Product.findById(id);
 

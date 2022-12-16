@@ -35,7 +35,7 @@ router.post(
     verifyToken,
     check("title", "The title is required").notEmpty(),
     check("category").notEmpty(),
-    check("category").custom(categoryIDExist),
+
     handleErrors,
   ],
   addProduct
