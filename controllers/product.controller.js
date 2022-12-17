@@ -34,11 +34,17 @@ const getProduct = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-  const { title, category, brand, stock, description, picture, price } =
-    req.body;
+  const { title, category, branch, stock, description, price } = req.body;
+
+  const { picture } = req.files;
+
+  console.log(picture);
 
   try {
     const productInDB = await Product.findOne({ title });
+
+    let numberPrice = Number(price);
+    let numberStock = Number(stock);
 
     if (productInDB) {
       return res.status(400).json({
@@ -47,27 +53,36 @@ const addProduct = async (req, res) => {
     }
 
     if (picture) {
-      const uploadRes = await cloudinary.uploader.upload(picture, {
-        upload_preset: "online-shop",
-      });
+      // const uploadRes = await cloudinary.uploader.upload(picture, {
+      //   upload_preset: "online-shop",
+      // });
 
-      if (uploadRes) {
+      const { tempFilePath } = req.files.picture;
+
+      const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+
+      // const fileName = await uploadFileHelper(req.files, collection);
+
+      // model.picture = secure_url;
+
+      if (secure_url) {
         const product = new Product({
           title,
-          brand,
-          price,
-          stock,
+          branch,
+          price: numberPrice,
+          stock: numberStock,
           category,
           description,
-          pictureURL: uploadRes,
+          pictureURL: secure_url,
         });
 
         const savedProduct = await product.save();
 
-        res.status(200).json({ savedProduct });
+        res.status(200).json(savedProduct);
       }
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       error,
     });
