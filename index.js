@@ -26,7 +26,9 @@ connectDatabase();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
+);
 app.use(
   cookieSession({
     name: "session",

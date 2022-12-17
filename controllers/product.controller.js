@@ -64,7 +64,7 @@ const addProduct = async (req, res) => {
 
         const savedProduct = await product.save();
 
-        res.status(200).json(savedProduct);
+        res.status(200).json({ savedProduct });
       }
     }
   } catch (error) {
