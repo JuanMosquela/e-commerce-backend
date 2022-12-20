@@ -56,7 +56,7 @@ router.delete(
   "/:id",
   [
     verifyToken,
-    verifyTokenAndAdmin,
+
     check("id", `its not a valid Mongo ID`).isMongoId(),
     check("id").custom(productIDExist),
     handleErrors,

@@ -130,8 +130,7 @@ const removeProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(id);
     res.status(200).json({
-      msg: "User removed from database",
-      product,
+      msg: "Product removed from database",
     });
   } catch (error) {
     res.status(400).json({
