@@ -98,22 +98,38 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
+  const { title, category, branch, stock, description, price } = req.body;
+  const { picture } = req.files;
 
-  const { title, price, pictureURL, description, stock } = req.body;
-
-  console.log(id);
   try {
     const product = await Product.findByIdAndUpdate(
       id,
       {
         title,
         price,
-        pictureURL,
+        category,
+        branch,
         description,
         stock,
       },
       { new: true }
     );
+
+    if (product.pictureURL) {
+      const fileArray = product.pictureURL[0].split("/");
+      const fileName = fileArray[fileArray.length - 1];
+      const [public_id] = fileName.split(".");
+      cloudinary.uploader.destroy(public_id);
+    }
+
+    const { tempFilePath } = req.files.picture;
+
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+
+    product.pictureURL = secure_url;
+
+    await product.save();
+
     res.status(200).json({
       product,
     });
