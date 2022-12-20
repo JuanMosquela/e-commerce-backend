@@ -33,9 +33,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
-    favorites: {
-      type: [productSchema],
-    },
+    favorites: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     products: [
       {
         type: Schema.Types.ObjectId,
