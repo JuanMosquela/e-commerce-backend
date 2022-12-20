@@ -61,6 +61,10 @@ export const productSchema = new Schema(
       default: 0,
     },
     reviews: [reviewSchema],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

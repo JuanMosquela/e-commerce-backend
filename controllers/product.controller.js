@@ -1,5 +1,6 @@
 import cloudinary from "../config/cloudinary-config.js";
 import Product from "../models/productSchema.js";
+import User from "../models/userSchema.js";
 
 const getAllProducts = async (req, res) => {
   try {
@@ -21,9 +22,11 @@ const getAllProducts = async (req, res) => {
 const getProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await Product.findById(id);
-    // .populate("user", "name")
-    // .populate("category", "name");
+    const product = await Product.findById(id).populate("owner");
+
+    if (!product) {
+      res.status(401).json({ msg: "No se encontro un producto con este id" });
+    }
 
     res.status(200).json({ product });
   } catch (error) {
@@ -35,12 +38,11 @@ const getProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const { title, category, branch, stock, description, price } = req.body;
-
+  const user = req.user;
   const { picture } = req.files;
 
-  console.log(picture);
-
   try {
+    const userInDB = await User.findById(user._id);
     const productInDB = await Product.findOne({ title });
 
     let numberPrice = Number(price);
@@ -74,9 +76,14 @@ const addProduct = async (req, res) => {
           category,
           description,
           pictureURL: secure_url,
+          owner: user._id,
         });
 
         const savedProduct = await product.save();
+
+        userInDB.products = userInDB.products.concat(savedProduct._id);
+
+        await userInDB.save();
 
         res.status(200).json(savedProduct);
       }
