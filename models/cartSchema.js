@@ -15,7 +15,7 @@ const CartSchema = new Schema(
           required: true,
           min: [1, "Quantity can not be less then 1."],
         },
-        subTotal: {
+        total: {
           type: Number,
           required: true,
           default: 0,
