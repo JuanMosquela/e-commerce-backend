@@ -1,5 +1,25 @@
 import mongoose, { Schema, model } from "mongoose";
+
 import { productSchema } from "./productSchema.js";
+
+const cartSchema = new Schema(
+  {
+    products: {
+      type: [productSchema],
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
+    total: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+  },
+  { timestamps: true }
+);
 
 const userSchema = new Schema(
   {
@@ -7,9 +27,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "The user name is required"],
     },
-    lastname: {
-      type: String,
-    },
+
     email: {
       type: String,
       required: [true, "The email is required"],
@@ -40,6 +58,7 @@ const userSchema = new Schema(
         ref: "Product",
       },
     ],
+    cart: { type: Schema.Types.ObjectId, ref: "Cart" },
   },
   { timestamps: true }
 );

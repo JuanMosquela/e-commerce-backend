@@ -82,7 +82,7 @@ const removeUser = async (req, res) => {
 };
 
 const getUserFavorites = async (req, res) => {
-  const { id } = req.params;
+  const { id = "" } = req.params;
   try {
     const user = await User.findById(id).populate("favorites");
 
