@@ -5,8 +5,6 @@ import User from "../models/userSchema.js";
 const getCart = async (req, res) => {
   const id = req.user._id;
 
-  console.log(id);
-
   try {
     const user = await User.findById(id).populate({
       path: "cart",
@@ -51,18 +49,6 @@ const addProductToCart = async (req, res) => {
 
     const foundProduct = await Product.findById(product);
 
-    // const newProduct = {
-    //   item: foundProduct._id,
-    //   quantity: quantity,
-    //   subTotal: foundProduct.price * quantity,
-    // };
-
-    // if (!foundProduct) {
-    //   return res
-    //     .status(400)
-    //     .json({ msg: `No se encontro el producto con id ${product._id}` });
-    // }
-
     let items = [];
 
     let object = {};
@@ -79,16 +65,18 @@ const addProductToCart = async (req, res) => {
 
         cart.totalQty = cart.totalQty + quantity;
 
+        let cartTotal = 0;
+
         cart.items.forEach((item) => {
-          cart.subTotal = item.total;
+          cartTotal = cartTotal + item.total;
         });
+
+        cart.subTotal = cartTotal;
 
         const savedCart = await cart.save();
 
         return res.status(400).json({ savedCart });
       }
-
-      let object = {};
 
       (object.item = foundProduct._id),
         (object.quantity = quantity),
@@ -105,8 +93,6 @@ const addProductToCart = async (req, res) => {
         savedCart,
       });
     } else {
-      console.log("no hay carrito");
-
       (object.item = foundProduct._id),
         (object.quantity = quantity),
         (object.total = foundProduct.price * quantity);
@@ -148,4 +134,98 @@ const addProductToCart = async (req, res) => {
   }
 };
 
-export { getCart, addProductToCart };
+const updateProductQuantity = async (req, res) => {
+  const owner = req.user._id;
+  const { id } = req.params;
+  const { value } = req.body;
+
+  try {
+    const product = await Product.findById(id);
+
+    const cart = await Cart.findOne({ owner }).populate({
+      path: "items",
+      populate: {
+        path: "item",
+      },
+    });
+
+    if (!product) {
+      return res
+        .status(400)
+        .json({ msg: "No se encontro el producto con este id" });
+    }
+
+    if (!cart) {
+      return res.status(400).json({ msg: "No hay carrito con este id" });
+    }
+
+    const findProduct = cart.items.find((item) => {
+      return product.id === item.item.id;
+    });
+
+    if (value === "asc") {
+      findProduct.quantity += 1;
+      findProduct.total += findProduct.item.price;
+
+      let cartTotal = 0;
+
+      cart.items.forEach((item) => {
+        cartTotal += item.total;
+      });
+
+      cart.subTotal = cartTotal;
+      cart.totalQty += 1;
+    } else {
+      findProduct.quantity -= 1;
+      findProduct.total -= findProduct.item.price;
+
+      cart.subTotal -= findProduct.item.price;
+      cart.totalQty -= 1;
+
+      if (findProduct.quantity === 0) {
+        console.log("el producto llego a 0");
+
+        const newArray = cart.items.filter((item) => {
+          console.log(item.item.id);
+          return findProduct.item.id !== item.item.id;
+        });
+
+        cart.items = newArray;
+      }
+    }
+
+    await cart.save();
+
+    res.status(200).json({
+      cart,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+const emptyCart = async (req, res) => {
+  const owner = req.user._id;
+
+  try {
+    const cart = await Cart.findOne({ owner });
+
+    cart.items = [];
+    cart.subTotal = 0;
+    cart.totalQty = 0;
+
+    const savedCart = await cart.save();
+
+    res.status(200).json({
+      savedCart,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+export { getCart, addProductToCart, updateProductQuantity, emptyCart };
