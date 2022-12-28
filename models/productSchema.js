@@ -52,10 +52,7 @@ export const productSchema = new Schema(
     branch: {
       type: String,
       required: true,
-    },
-    subCategory: {
-      type: Schema.Types.Mixed,
-    },
+    },    
     numReviews: {
       type: Number,
       default: 0,

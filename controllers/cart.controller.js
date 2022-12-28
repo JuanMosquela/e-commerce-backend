@@ -18,7 +18,7 @@ const getCart = async (req, res) => {
 
     if (!user.cart) {
       return res.status(400).json({
-        msg: "No hay usuario",
+        msg: "Este usuario no tiene un carrito",
       });
     }
 
