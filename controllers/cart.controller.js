@@ -63,16 +63,29 @@ const addProductToCart = async (req, res) => {
     //     .json({ msg: `No se encontro el producto con id ${product._id}` });
     // }
 
+    let items = [];
+
+    let object = {};
+
     if (cart) {
-      console.log(cart);
       const duplicatedProduct = cart.items.find((item) => {
         return foundProduct.id === item.item.id;
       });
 
-      console.log(duplicatedProduct);
-
       if (duplicatedProduct) {
-        return res.status(400).json({ msg: "el producto esta repetido" });
+        duplicatedProduct.quantity = duplicatedProduct.quantity + quantity;
+        duplicatedProduct.total =
+          duplicatedProduct.total + duplicatedProduct.item.price * quantity;
+
+        cart.totalQty = cart.totalQty + quantity;
+
+        cart.items.forEach((item) => {
+          cart.subTotal = item.total;
+        });
+
+        const savedCart = await cart.save();
+
+        return res.status(400).json({ savedCart });
       }
 
       let object = {};
@@ -93,10 +106,6 @@ const addProductToCart = async (req, res) => {
       });
     } else {
       console.log("no hay carrito");
-
-      let items = [];
-
-      let object = {};
 
       (object.item = foundProduct._id),
         (object.quantity = quantity),
