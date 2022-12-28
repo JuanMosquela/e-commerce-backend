@@ -23,7 +23,7 @@ const getCart = async (req, res) => {
     }
 
     res.status(200).json({
-      user,
+      result: user.cart,
     });
   } catch (error) {
     res.status(400).json({
