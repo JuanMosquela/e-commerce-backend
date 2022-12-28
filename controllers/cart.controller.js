@@ -230,10 +230,16 @@ const removeProduct = async (req, res) => {
       return res.status(400).json({ msg: "No hay carrito con este id" });
     }
 
+    const itemIndex = cart.items.findIndex((item) => {
+      return item.item.id === product.id;
+    });
+
     const newArray = cart.items.filter((item) => {
       return product.id !== item.item.id;
     });
 
+    cart.totalQty = cart.totalQty - cart.items[itemIndex].quantity;
+    cart.subTotal = cart.subTotal - cart.items[itemIndex].total;
     cart.items = newArray;
 
     const newCart = await cart.save();
