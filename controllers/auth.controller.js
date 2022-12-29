@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import generateToken from "../helpers/token-validation.js";
 import axios from "axios";
 import { response } from "express";
+import transporter from "../config/nodeMailer.js";
 
 const signUpUser = async (req, res) => {
   if (req.body.googleAccessToken) {
@@ -126,4 +127,31 @@ const signInUser = async (req, res) => {
   }
 };
 
-export { signInUser, signUpUser };
+const sendEmail = async (req, res) => {
+  const { user, email, subject, description } = req.body;
+
+  try {
+    transporter
+      .sendMail({
+        form: `"${user}" <${process.env.GMAIL_SECRET}> `,
+        to: email,
+        subject: `${subject} -> mensaje de prueba`,
+        text: "hello world",
+        html: `<b>de: </b> ${user}
+      <br><br>
+      <p>${description}</p> `,
+      })
+      .then(() => console.log("el mensaje se ha enviado correctamente"))
+      .catch((err) => console.log(err));
+
+    res.status(200).json({
+      msg: "Correo enviado correctamente",
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+export { signInUser, signUpUser, sendEmail };

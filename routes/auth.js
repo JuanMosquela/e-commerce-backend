@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import handleErrors from "../middlewares/handleErrors.js";
-import { signInUser, signUpUser } from "../controllers/auth.controller.js";
+import {
+  sendEmail,
+  signInUser,
+  signUpUser,
+} from "../controllers/auth.controller.js";
 
 const router = Router();
 
@@ -17,5 +21,7 @@ router.post(
 );
 
 router.post("/login", signInUser);
+
+router.post("/send-mail", sendEmail);
 
 export default router;

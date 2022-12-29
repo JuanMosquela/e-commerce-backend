@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import cloudinaryModule from "cloudinary";
 const cloudinary = cloudinaryModule.v2;
 
