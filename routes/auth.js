@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { check } from "express-validator";
+import { body, check } from "express-validator";
 import handleErrors from "../middlewares/handleErrors.js";
 import {
   sendEmail,
@@ -22,6 +22,16 @@ router.post(
 
 router.post("/login", signInUser);
 
-router.post("/send-mail", sendEmail);
+router.post(
+  "/send-mail",
+  [
+    body("user", "El usuario es obligatorio").notEmpty(),
+    body("email", "No es un correo valiod").isEmail(),
+    body("subject", "El asunto es obligatorio").notEmpty(),
+    body("description", "La descripcion es obligatoria").notEmpty(),
+    handleErrors,
+  ],
+  sendEmail
+);
 
 export default router;
