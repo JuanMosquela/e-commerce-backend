@@ -133,7 +133,7 @@ const sendEmail = async (req, res) => {
   try {
     transporter
       .sendMail({
-        form: `"${user}" <${process.env.GMAIL_SECRET}> `,
+        from: `"${user}" <${process.env.GMAIL_SECRET}> `,
         to: email,
         subject: `${subject} -> mensaje de prueba`,
         text: "hello world",
