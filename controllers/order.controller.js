@@ -4,6 +4,7 @@ import Order from "../models/orderSchema.js";
 import User from "../models/userSchema.js";
 import path from "path";
 import hbs from "nodemailer-express-handlebars";
+import Product from "../models/productSchema.js";
 
 const createOrder = async (req, res) => {
   const { id } = req.user;
@@ -31,6 +32,19 @@ const createOrder = async (req, res) => {
         msg: "No existe este carrito",
       });
     }
+
+    let update = cart.items.map((item) => {
+      return {
+        updateOne: {
+          filter: { _id: item.item._id },
+          update: { $inc: { stock: -item.quantity } },
+        },
+      };
+    });
+
+    const productUpdated = await Product.bulkWrite(update, {});
+
+    console.log(productUpdated);
 
     const newOrder = await new Order({
       products: cart.items,
