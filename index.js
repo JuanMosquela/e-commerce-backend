@@ -16,6 +16,7 @@ import uploadRouter from "./routes/upload.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
 import fileUpload from "express-fileupload";
+import mercadopago from "mercadopago";
 
 // import passportSetup from "./passport.js";
 
