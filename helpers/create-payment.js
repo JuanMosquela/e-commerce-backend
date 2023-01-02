@@ -1,29 +1,39 @@
-import axios from "axios";
+import mercadopago from "mercadopago";
 
-const createPayment = async (products) => {
+const createPayment = async (res, products) => {
   const url = "https://api.mercadopago.com/checkout/preferences";
 
-  const body = {
-    payer: {
-      name: "TETE1326257",
-      email: "test_user_64012831@testuser.com",
-    },
+  let preference = {
+    // payer: {
+    //   name: "TETE1326257",
+    //   email: "test_user_64012831@testuser.com",
+    // },
     items: products,
     back_urls: {
       failure: "/failure",
       pending: "/pending",
       success: "/success",
     },
+    auto_return: "approved",
+    binary_mode: true,
   };
 
-  const { data } = await axios.post(url, body, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-    },
+  mercadopago.configure({
+    access_token: process.env.ACCESS_TOKEN,
   });
 
-  return data;
+  const { body } = await mercadopago.preferences
+    .create(preference)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return res.status(400).json({
+        error,
+      });
+    });
+
+  return body;
 };
 
 export default createPayment;

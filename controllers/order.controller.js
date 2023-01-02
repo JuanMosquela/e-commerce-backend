@@ -36,7 +36,7 @@ const createOrder = async (req, res) => {
     const products = cart.items.map((product) => {
       return {
         title: product.item.title,
-        description: product.item.description,
+        description: "descripcion del producto",
         picture_url: product.item.pictureURL[0],
         category_id: product.item.category,
         quantity: product.quantity,
@@ -44,12 +44,13 @@ const createOrder = async (req, res) => {
       };
     });
 
-    const data = await createPayment(products);
-
-    console.log(data);
+    const body = await createPayment(res, products);
 
     res.status(200).json({
-      result: data.id,
+      result: {
+        client_id: body.client_id,
+        init_point: body.init_point,
+      },
     });
 
     // let update = cart.items.map((item) => {
