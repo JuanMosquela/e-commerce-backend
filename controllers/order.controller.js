@@ -64,41 +64,41 @@ const createOrder = async (req, res) => {
 
     // const productUpdated = await Product.bulkWrite(update, {});
 
-    // const newOrder = await new Order({
-    //   products: cart.items,
-    //   orderBy: user._id,
-    //   orderStatus: "On Delivery",
-    // }).save();
+    const newOrder = await new Order({
+      products: cart.items,
+      orderBy: user._id,
+      orderStatus: "On Delivery",
+    }).save();
 
-    // let array = "";
+    let array = "";
 
-    // let n;
-    // for (n in cart.items) {
-    //   array += `<li>${cart.items[n].item.title} --- <span>${cart.items[
-    //     n
-    //   ].total.toFixed(2)}</span> x <span>${
-    //     cart.items[n].quantity
-    //   }</span> </li>`;
-    // }
+    let n;
+    for (n in cart.items) {
+      array += `<li>${cart.items[n].item.title} --- <span>${cart.items[
+        n
+      ].total.toFixed(2)}</span> x <span>${
+        cart.items[n].quantity
+      }</span> </li>`;
+    }
 
-    // transporter
-    //   .sendMail({
-    //     from: `"Physical Point" <${process.env.GMAIL_SECRET}> `,
-    //     to: user.email,
-    //     subject: `Order Confirmation - Physical Point`,
+    transporter
+      .sendMail({
+        from: `"Physical Point" <${process.env.GMAIL_SECRET}> `,
+        to: user.email,
+        subject: `Order Confirmation - Physical Point`,
 
-    //     html: `<h1>Thank you for your buy !</h1>
-    //     <h2>Your order confirmation is below</h2>
-    //     <br><br>
-    //    <ul>
-    //    ${array}
-    //    <br>
-    //    <li>$ ${cart.subTotal.toFixed(2)}</li>
+        html: `<h1>Thank you for your buy !</h1>
+        <h2>Your order confirmation is below</h2>
+        <br><br>
+       <ul>
+       ${array}
+       <br>
+       <li>$ ${cart.subTotal.toFixed(2)}</li>
 
-    //    </ul>`,
-    //   })
-    //   .then(() => console.log("el mensaje se ha enviado correctamente"))
-    //   .catch((err) => console.log(err));
+       </ul>`,
+      })
+      .then(() => console.log("el mensaje se ha enviado correctamente"))
+      .catch((err) => console.log(err));
 
     // res.status(200).json(newOrder);
     // res.status(200).json({ msg: "todo ok" });

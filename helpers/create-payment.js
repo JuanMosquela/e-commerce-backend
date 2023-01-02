@@ -4,10 +4,6 @@ const createPayment = async (res, products) => {
   const url = "https://api.mercadopago.com/checkout/preferences";
 
   let preference = {
-    // payer: {
-    //   name: "TETE1326257",
-    //   email: "test_user_64012831@testuser.com",
-    // },
     items: products,
     back_urls: {
       failure: "/failure",
