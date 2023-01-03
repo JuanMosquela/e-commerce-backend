@@ -47,66 +47,63 @@ const createOrder = async (req, res) => {
     const body = await createPayment(res, products);
 
     res.status(200).json({
-      result: {
-        client_id: body.client_id,
-        init_point: body.init_point,
-      },
+      init_point: body.init_point,
     });
 
-    let update = cart.items.map((item) => {
-      return {
-        updateOne: {
-          filter: { _id: item.item._id },
-          update: { $inc: { stock: -item.quantity } },
-        },
-      };
-    });
+    // let update = cart.items.map((item) => {
+    //   return {
+    //     updateOne: {
+    //       filter: { _id: item.item._id },
+    //       update: { $inc: { stock: -item.quantity } },
+    //     },
+    //   };
+    // });
 
-    await Product.bulkWrite(update, {});
+    // await Product.bulkWrite(update, {});
 
-    const newOrder = await new Order({
-      products: cart.items,
-      orderBy: user._id,
-      orderStatus: "On Delivery",
-    }).save();
+    // const newOrder = await new Order({
+    //   products: cart.items,
+    //   orderBy: user._id,
+    //   orderStatus: "On Delivery",
+    // }).save();
 
-    let array = "";
+    // let array = "";
 
-    let n;
-    for (n in cart.items) {
-      array += `<li>${cart.items[n].item.title} --- <span>${cart.items[
-        n
-      ].total.toFixed(2)}</span> x <span>${
-        cart.items[n].quantity
-      }</span> </li>`;
-    }
+    // let n;
+    // for (n in cart.items) {
+    //   array += `<li>${cart.items[n].item.title} --- <span>${cart.items[
+    //     n
+    //   ].total.toFixed(2)}</span> x <span>${
+    //     cart.items[n].quantity
+    //   }</span> </li>`;
+    // }
 
-    console.log(array);
+    // console.log(array);
 
-    transporter
-      .sendMail({
-        from: `"Physical Point" <${process.env.GMAIL_SECRET}> `,
-        to: user.email,
-        subject: `Order Confirmation - Physical Point`,
+    // transporter
+    //   .sendMail({
+    //     from: `"Physical Point" <${process.env.GMAIL_SECRET}> `,
+    //     to: user.email,
+    //     subject: `Order Confirmation - Physical Point`,
 
-        html: `<h1>Thank you for your buy !</h1>
-        <h2>Your order confirmation is below</h2>
-        <br><br>
-       <ul>
-       ${array}
-       <br>
-       <li>$ ${cart.subTotal.toFixed(2)}</li>
+    //     html: `<h1>Thank you for your buy !</h1>
+    //     <h2>Your order confirmation is below</h2>
+    //     <br><br>
+    //    <ul>
+    //    ${array}
+    //    <br>
+    //    <li>$ ${cart.subTotal.toFixed(2)}</li>
 
-       </ul>`,
-      })
-      .then(() => console.log("el mensaje se ha enviado correctamente"))
-      .catch((err) => console.log(err));
+    //    </ul>`,
+    //   })
+    //   .then(() => console.log("el mensaje se ha enviado correctamente"))
+    //   .catch((err) => console.log(err));
 
-    cart.items = [];
-    cart.subTotal = 0;
-    cart.totalQty = 0;
+    // cart.items = [];
+    // cart.subTotal = 0;
+    // cart.totalQty = 0;
 
-    await cart.save();
+    // await cart.save();
   } catch (error) {
     res.status(400).json({ error });
   }
