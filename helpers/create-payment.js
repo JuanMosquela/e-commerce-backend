@@ -6,8 +6,8 @@ const createPayment = async (products) => {
   let preference = {
     items: products,
     back_urls: {
-      failure: "/failure",
-      pending: "/pending",
+      failure: "http://localhost:3000",
+      pending: "http://localhost:3000",
       success: "http://localhost:3000",
     },
     auto_return: "approved",
