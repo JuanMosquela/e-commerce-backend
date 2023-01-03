@@ -44,7 +44,7 @@ const createOrder = async (req, res) => {
       };
     });
 
-    const body = await createPayment(res, products);
+    const body = await createPayment(products);
 
     res.status(200).json({
       init_point: body.init_point,

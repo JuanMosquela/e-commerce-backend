@@ -1,6 +1,6 @@
 import mercadopago from "mercadopago";
 
-const createPayment = async (res, products) => {
+const createPayment = async (products) => {
   const url = "https://api.mercadopago.com/checkout/preferences";
 
   let preference = {
