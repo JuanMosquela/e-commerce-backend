@@ -8,7 +8,7 @@ const createPayment = async (res, products) => {
     back_urls: {
       failure: "/failure",
       pending: "/pending",
-      success: "/http://localhost:3000",
+      success: "http://localhost:3000",
     },
     auto_return: "approved",
     binary_mode: true,
