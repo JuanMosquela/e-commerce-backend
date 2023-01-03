@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary-config.js";
 import User from "../models/userSchema.js";
 
 const getUser = async (req, res) => {
@@ -42,8 +43,8 @@ const getAllUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { id } = req.params;
-
   const { name, email } = req.body;
+  const { picture } = req.files;
 
   try {
     const user = await User.findByIdAndUpdate(
@@ -54,6 +55,21 @@ const updateUser = async (req, res) => {
       },
       { new: true }
     );
+
+    if (user.picture) {
+      const fileArray = user.picture[0].split("/");
+      const fileName = fileArray[fileArray.length - 1];
+      const [public_id] = fileName.split(".");
+      cloudinary.uploader.destroy(public_id);
+    }
+
+    const { tempFilePath } = picture;
+
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+
+    user.picture = secure_url;
+
+    await user.save();
 
     res.status(200).json({
       user,
