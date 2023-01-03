@@ -36,7 +36,7 @@ const createOrder = async (req, res) => {
     const products = cart.items.map((product) => {
       return {
         title: product.item.title,
-        description: "descripcion del producto",
+        description: product.item.description.slice(0, 200),
         picture_url: product.item.pictureURL[0],
         category_id: product.item.category,
         quantity: product.quantity,

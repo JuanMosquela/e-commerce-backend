@@ -3,7 +3,8 @@ console.log(process.env.GMAIL_SECRET);
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
-
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.GMAIL_SECRET,
     pass: process.env.GOOGLE_SECRET,

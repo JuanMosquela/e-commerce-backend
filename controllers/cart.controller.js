@@ -71,7 +71,7 @@ const addProductToCart = async (req, res) => {
           cartTotal = cartTotal + item.total;
         });
 
-        cart.subTotal = cartTotal.toFixed(2);
+        cart.subTotal = cartTotal;
 
         const savedCart = await cart.save();
 
