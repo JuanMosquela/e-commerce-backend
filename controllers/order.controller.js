@@ -53,16 +53,16 @@ const createOrder = async (req, res) => {
       },
     });
 
-    // let update = cart.items.map((item) => {
-    //   return {
-    //     updateOne: {
-    //       filter: { _id: item.item._id },
-    //       update: { $inc: { stock: -item.quantity } },
-    //     },
-    //   };
-    // });
+    let update = cart.items.map((item) => {
+      return {
+        updateOne: {
+          filter: { _id: item.item._id },
+          update: { $inc: { stock: -item.quantity } },
+        },
+      };
+    });
 
-    // const productUpdated = await Product.bulkWrite(update, {});
+    await Product.bulkWrite(update, {});
 
     const newOrder = await new Order({
       products: cart.items,
@@ -100,8 +100,9 @@ const createOrder = async (req, res) => {
       .then(() => console.log("el mensaje se ha enviado correctamente"))
       .catch((err) => console.log(err));
 
-    // res.status(200).json(newOrder);
-    // res.status(200).json({ msg: "todo ok" });
+    cart.items = [];
+    cart.subTotal = 0;
+    cart.totalQty = 0;
   } catch (error) {
     res.status(400).json({ error });
   }
