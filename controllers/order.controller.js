@@ -81,6 +81,8 @@ const createOrder = async (req, res) => {
       }</span> </li>`;
     }
 
+    console.log(array);
+
     transporter
       .sendMail({
         from: `"Physical Point" <${process.env.GMAIL_SECRET}> `,
@@ -103,6 +105,8 @@ const createOrder = async (req, res) => {
     cart.items = [];
     cart.subTotal = 0;
     cart.totalQty = 0;
+
+    await cart.save();
   } catch (error) {
     res.status(400).json({ error });
   }

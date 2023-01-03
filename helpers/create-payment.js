@@ -18,16 +18,7 @@ const createPayment = async (res, products) => {
     access_token: process.env.ACCESS_TOKEN,
   });
 
-  const { body } = await mercadopago.preferences
-    .create(preference)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return res.status(400).json({
-        error,
-      });
-    });
+  const { body } = await mercadopago.preferences.create(preference);
 
   return body;
 };
