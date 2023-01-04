@@ -2,6 +2,11 @@ import { Schema, model } from "mongoose";
 
 const orderSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
+
     products: [
       {
         product: {
@@ -16,7 +21,21 @@ const orderSchema = new Schema(
 
     paymentMethod: {
       type: String,
-      default: "Mercado Pago",
+      enum: ["Mercado Pago", "Paypal"],
+    },
+    shippingAdress: String,
+
+    country: {
+      type: String,
+      required: true,
+    },
+    postalCode: {
+      type: Number,
+      required: true,
+    },
+    adress: {
+      type: String,
+      required: true,
     },
 
     orderStatus: {
@@ -31,6 +50,7 @@ const orderSchema = new Schema(
         "Delivered",
       ],
     },
+
     orderBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
