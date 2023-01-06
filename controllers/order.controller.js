@@ -135,6 +135,7 @@ const createPayment = async (req, res) => {
         category_id: product.item.category,
         quantity: product.quantity,
         unit_price: product.item.price,
+        currency_id: "ARS",
       };
     });
 
