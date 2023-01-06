@@ -5,6 +5,6 @@ const router = Router();
 
 router.post("/", verifyToken, createOrder);
 
-router.post("/payment", verifyToken, createPayment);
+router.get("/create-payment", verifyToken, createPayment);
 
 export default router;

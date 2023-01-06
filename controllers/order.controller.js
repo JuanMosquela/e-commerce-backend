@@ -100,6 +100,8 @@ const createOrder = async (req, res) => {
   }
 };
 
+//acesstokenvendedor = TEST-2151239761844359-010513-5f9b4389ea7feba2a52fb8e0e9eae377-1276901883
+
 const createPayment = async (req, res) => {
   const { id } = req.user;
 
@@ -139,12 +141,13 @@ const createPayment = async (req, res) => {
     let preference = {
       items: products,
       back_urls: {
-        failure: "http://localhost:3000",
+        failure: "http://localhost:3000/failure",
         pending: "http://localhost:3000",
-        success: "http://localhost:3000",
+        success: "https://fit-commerce.onrender.com/success",
       },
       auto_return: "approved",
       binary_mode: true,
+      notification_url: "https://fit-commerce.onrender.com/success",
     };
 
     mercadopago.configure({

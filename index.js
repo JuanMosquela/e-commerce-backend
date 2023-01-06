@@ -8,6 +8,7 @@ import searchRouter from "./routes/search.js";
 import favoriteRouter from "./routes/favorite.js";
 import orderRouter from "./routes/order.js";
 import cartRouter from "./routes/cart.js";
+
 import cors from "cors";
 import connectDatabase from "./config/db.config.js";
 import Product from "./models/productSchema.js";
@@ -58,6 +59,7 @@ app.use("/api/favorites", favoriteRouter);
 app.use("/api/uploads", uploadRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
+
 app.use("/insertProducts", async (req, res) => {
   const insertedProducts = await Product.insertMany(products);
   res.json({
