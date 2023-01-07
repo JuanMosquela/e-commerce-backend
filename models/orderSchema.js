@@ -21,7 +21,6 @@ const orderSchema = new Schema(
 
     paymentMethod: {
       type: String,
-      enum: ["Mercado Pago", "Paypal"],
     },
     shippingAdress: String,
 
@@ -48,6 +47,8 @@ const orderSchema = new Schema(
         "Dispatched",
         "Cancelled",
         "Delivered",
+        "closed",
+        "paid",
       ],
     },
 

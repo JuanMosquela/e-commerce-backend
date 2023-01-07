@@ -6,6 +6,7 @@ import path from "path";
 import hbs from "nodemailer-express-handlebars";
 import Product from "../models/productSchema.js";
 import axios from "axios";
+import createMPOrder from "../helpers/create-order.js";
 
 import mercadopago from "mercadopago";
 
@@ -129,6 +130,7 @@ const createPayment = async (req, res) => {
 
     const products = cart.items.map((product) => {
       return {
+        id: product.item.id,
         title: product.item.title,
         description: product.item.description.slice(0, 200),
         picture_url: product.item.pictureURL[0],
@@ -146,9 +148,23 @@ const createPayment = async (req, res) => {
         pending: "http://localhost:3000",
         success: "https://fit-commerce.onrender.com/success",
       },
+      payer: {
+        address: {
+          street_name: "Calle falsa",
+          street_number: 123,
+        },
+        email: "jmosquella11@hotmail.com",
+        identification: {
+          number: "39549980",
+          type: "DNI",
+        },
+        name: "Juan Manuel",
+        surname: "Mosquella",
+      },
       auto_return: "approved",
       binary_mode: true,
-      notification_url: "https://fit-commerce.onrender.com/success",
+      notification_url:
+        "https://d05b-2800-810-48a-cc1-6cf8-6cc4-1d89-b331.sa.ngrok.io/api/order/notification",
     };
 
     mercadopago.configure({
@@ -158,7 +174,7 @@ const createPayment = async (req, res) => {
     const { body } = await mercadopago.preferences.create(preference);
 
     res.status(200).json({
-      init_point: body.init_point,
+      result: body,
     });
   } catch (error) {
     res.status(400).json({
@@ -167,4 +183,49 @@ const createPayment = async (req, res) => {
   }
 };
 
-export { createOrder, createPayment };
+const notification = async (req, res) => {
+  const { query } = req;
+
+  const topic = query.topic;
+
+  let merchand_order;
+
+  switch (topic) {
+    case "payment":
+      const payment_id = query.id;
+      const payment = await mercadopago.payment.findById(payment_id);
+      merchand_order = await mercadopago.merchant_orders.findById(
+        payment.body.order.id
+      );
+
+      break;
+    case "merchand_order":
+      const order_id = query.id;
+      merchand_order = await mercadopago.merchant_orders.findById(order_id);
+
+      break;
+  }
+
+  let paidAmount = 0;
+
+  const body = merchand_order?.body;
+
+  body?.payments?.forEach((payment) => {
+    if (payment?.status === "approved") {
+      paidAmount += payment?.total_paid_amount;
+    }
+  });
+
+  if (paidAmount >= body?.total_amount) {
+    createMPOrder(merchand_order);
+    res.status(200).json({
+      msg: "orden creada correctamente",
+    });
+  } else {
+    res.status(400).json({
+      msg: "orden no pudo ser creada",
+    });
+  }
+};
+
+export { createOrder, createPayment, notification };
