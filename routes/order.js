@@ -9,7 +9,7 @@ const router = Router();
 
 router.post("/", verifyToken, createOrder);
 
-router.get("/create-payment", verifyToken, createPayment);
+router.get("/create-payment/:id", verifyToken, createPayment);
 
 router.post("/notification", notification);
 

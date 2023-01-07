@@ -1,14 +1,9 @@
-import transporter from "../config/nodeMailer.js";
 import Cart from "../models/cartSchema.js";
 import Order from "../models/orderSchema.js";
 import User from "../models/userSchema.js";
-import path from "path";
-import hbs from "nodemailer-express-handlebars";
-import Product from "../models/productSchema.js";
-import axios from "axios";
 import createMPOrder from "../helpers/create-order.js";
-
-import mercadopago from "mercadopago";
+import transporter from "../config/nodeMailer.js";
+import mercadopago from "../config/mercadopago-config.js";
 
 const createOrder = async (req, res) => {
   const { id } = req.user;
@@ -104,23 +99,15 @@ const createOrder = async (req, res) => {
 //acesstokenvendedor = TEST-2151239761844359-010513-5f9b4389ea7feba2a52fb8e0e9eae377-1276901883
 
 const createPayment = async (req, res) => {
-  const { id } = req.user;
+  const { id } = req.params;
 
   try {
-    const user = await User.findById(id);
-
-    const cart = await Cart.findOne({ owner: user.id }).populate({
+    const cart = await Cart.findById(id).populate({
       path: "items",
       populate: {
         path: "item",
       },
     });
-
-    if (!user) {
-      return res.status(400).json({
-        msg: "No existe este usuario",
-      });
-    }
 
     if (!cart) {
       return res.status(400).json({
@@ -143,13 +130,19 @@ const createPayment = async (req, res) => {
 
     let preference = {
       items: products,
+      transaction_amount: 123456,
       back_urls: {
         failure: "http://localhost:3000/failure",
         pending: "http://localhost:3000",
         success: "https://fit-commerce.onrender.com/success",
       },
       payer: {
+        phone: {
+          area_code: "1875",
+          number: 1140895192,
+        },
         address: {
+          zip_code: "452",
           street_name: "Calle falsa",
           street_number: 123,
         },
@@ -160,6 +153,7 @@ const createPayment = async (req, res) => {
         },
         name: "Juan Manuel",
         surname: "Mosquella",
+        date_created: Date.now(),
       },
       auto_return: "approved",
       binary_mode: true,
@@ -167,14 +161,11 @@ const createPayment = async (req, res) => {
         "https://d05b-2800-810-48a-cc1-6cf8-6cc4-1d89-b331.sa.ngrok.io/api/order/notification",
     };
 
-    mercadopago.configure({
-      access_token: process.env.ACCESS_TOKEN,
-    });
-
     const { body } = await mercadopago.preferences.create(preference);
 
     res.status(200).json({
-      result: body,
+      init_point: body.init_point,
+      items: body.items,
     });
   } catch (error) {
     res.status(400).json({
