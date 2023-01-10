@@ -101,6 +101,19 @@ const createOrder = async (req, res) => {
 const createPayment = async (req, res) => {
   const { id } = req.params;
 
+  const {
+    name,
+    lastName,
+    email,
+    streetName,
+    streetNumber,
+    zipCode,
+    areaCode,
+    phone,
+    identification,
+    identificationNumber,
+  } = req.body;
+
   try {
     const cart = await Cart.findById(id).populate({
       path: "items",
@@ -138,21 +151,21 @@ const createPayment = async (req, res) => {
       },
       payer: {
         phone: {
-          area_code: "1875",
-          number: 1140895192,
+          area_code: String(areaCode),
+          number: phone,
         },
         address: {
-          zip_code: "452",
-          street_name: "Calle falsa",
-          street_number: 123,
+          zip_code: String(zipCode),
+          street_name: streetName,
+          street_number: streetNumber,
         },
-        email: "jmosquella11@hotmail.com",
+        email,
         identification: {
-          number: "39549980",
-          type: "DNI",
+          number: String(identificationNumber),
+          type: identification,
         },
-        name: "Juan Manuel",
-        surname: "Mosquella",
+        name: name,
+        surname: lastName,
         date_created: Date.now(),
       },
       auto_return: "approved",
@@ -164,8 +177,7 @@ const createPayment = async (req, res) => {
     const { body } = await mercadopago.preferences.create(preference);
 
     res.status(200).json({
-      init_point: body.init_point,
-      items: body.items,
+      body,
     });
   } catch (error) {
     res.status(400).json({
