@@ -171,7 +171,8 @@ const createPayment = async (req, res) => {
       auto_return: "approved",
       binary_mode: true,
       notification_url:
-        "https://d05b-2800-810-48a-cc1-6cf8-6cc4-1d89-b331.sa.ngrok.io/api/order/notification",
+        // "https://d05b-2800-810-48a-cc1-6cf8-6cc4-1d89-b331.sa.ngrok.io/api/order/notification",
+        "https://e-commerce-backend-production-e980.up.railway.app/api/notification",
     };
 
     const { body } = await mercadopago.preferences.create(preference);
