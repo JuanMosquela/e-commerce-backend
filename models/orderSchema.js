@@ -2,9 +2,19 @@ import { Schema, model } from "mongoose";
 
 const orderSchema = new Schema(
   {
-    name: {
+    firstName: {
       type: String,
-      required: true,
+    },
+    lastName: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    phone: Schema.Types.Mixed,
+    transactionAmount: Schema.Types.Mixed,
+    orderId: {
+      type: Number,
     },
 
     products: [
@@ -19,24 +29,6 @@ const orderSchema = new Schema(
       },
     ],
 
-    paymentMethod: {
-      type: String,
-    },
-    shippingAdress: String,
-
-    country: {
-      type: String,
-      required: true,
-    },
-    postalCode: {
-      type: Number,
-      required: true,
-    },
-    adress: {
-      type: String,
-      required: true,
-    },
-
     orderStatus: {
       type: String,
       default: "Not Processed",
@@ -49,6 +41,7 @@ const orderSchema = new Schema(
         "Delivered",
         "closed",
         "paid",
+        "approved",
       ],
     },
 

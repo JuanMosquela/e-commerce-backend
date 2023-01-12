@@ -2,99 +2,74 @@ import Cart from "../models/cartSchema.js";
 import Order from "../models/orderSchema.js";
 import User from "../models/userSchema.js";
 import createMPOrder from "../helpers/create-order.js";
-import transporter from "../config/nodeMailer.js";
+
 import mercadopago from "../config/mercadopago-config.js";
+import createOrder from "../helpers/create-order.js";
+import Product from "../models/productSchema.js";
+import sendEmail from "../helpers/send-email.js";
 
-const createOrder = async (req, res) => {
-  const { id } = req.user;
-  const { name, adress, paymentMethod, postalCode, country } = req.body;
+// const createOrder = async (req, res) => {
+//   const { id } = req.user;
+//   const { name, adress, paymentMethod, postalCode, country } = req.body;
 
-  try {
-    const user = await User.findById(id);
+//   try {
+//     const user = await User.findById(id);
 
-    const cart = await Cart.findOne({ owner: user.id }).populate({
-      path: "items",
-      populate: {
-        path: "item",
-      },
-    });
+//     const cart = await Cart.findOne({ owner: user.id }).populate({
+//       path: "items",
+//       populate: {
+//         path: "item",
+//       },
+//     });
 
-    if (!user) {
-      return res.status(400).json({
-        msg: "No existe este usuario",
-      });
-    }
+//     if (!user) {
+//       return res.status(400).json({
+//         msg: "No existe este usuario",
+//       });
+//     }
 
-    if (!cart) {
-      return res.status(400).json({
-        msg: "No existe este carrito",
-      });
-    }
+//     if (!cart) {
+//       return res.status(400).json({
+//         msg: "No existe este carrito",
+//       });
+//     }
 
-    // let update = cart.items.map((item) => {
-    //   return {
-    //     updateOne: {
-    //       filter: { _id: item.item._id },
-    //       update: { $inc: { stock: -item.quantity } },
-    //     },
-    //   };
-    // });
+// let update = cart.items.map((item) => {
+//   return {
+//     updateOne: {
+//       filter: { _id: item.item._id },
+//       update: { $inc: { stock: -item.quantity } },
+//     },
+//   };
+// });
 
-    // await Product.bulkWrite(update, {});
+// await Product.bulkWrite(update, {});
 
-    const newOrder = new Order({
-      products: cart.items,
-      orderBy: user._id,
-      orderStatus: "On Delivery",
-      name,
-      adress,
-      paymentMethod,
-      country,
-      postalCode,
-    });
+//     const newOrder = new Order({
+//       products: cart.items,
+//       orderBy: user._id,
+//       orderStatus: "On Delivery",
+//       name,
+//       adress,
+//       paymentMethod,
+//       country,
+//       postalCode,
+//     });
 
-    const order = await newOrder.save();
+//     const order = await newOrder.save();
 
-    let array = "";
+//
 
-    let n;
-    for (n in cart.items) {
-      array += `<li>${cart.items[n].item.title} --- <span>${cart.items[
-        n
-      ].total.toFixed(2)}</span> x <span>${
-        cart.items[n].quantity
-      }</span> </li>`;
-    }
+//     // cart.items = [];
+//     // cart.subTotal = 0;
+//     // cart.totalQty = 0;
 
-    transporter
-      .sendMail({
-        from: `"Physical Point" <${process.env.GMAIL_SECRET}> `,
-        to: user.email,
-        subject: `Order Confirmation - Physical Point`,
-
-        html: `<h1>Thank you for your buy !</h1>
-        <h2>Your order confirmation is below</h2>
-        <br><br>
-       <ul>
-       ${array}
-       <br>
-       <li>$ ${cart.subTotal.toFixed(2)}</li>
-
-       </ul>`,
-      })
-      .then(() => console.log("el mensaje se ha enviado correctamente"))
-      .catch((err) => console.log(err));
-
-    // cart.items = [];
-    // cart.subTotal = 0;
-    // cart.totalQty = 0;
-
-    // await cart.save();
-    res.status(200).json(order);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
+//     // await cart.save();
+//     res.status(200).json(order);
+//   } catch (error) {
+//     res.status(400).json(error);
+//   }
+// };
 
 //acesstokenvendedor = TEST-2151239761844359-010513-5f9b4389ea7feba2a52fb8e0e9eae377-1276901883
 
@@ -115,12 +90,15 @@ const createPayment = async (req, res) => {
   } = req.body;
 
   try {
-    const cart = await Cart.findById(id).populate({
-      path: "items",
-      populate: {
-        path: "item",
+    const cart = await Cart.findById(id).populate([
+      "owner",
+      {
+        path: "items",
+        populate: {
+          path: "item",
+        },
       },
-    });
+    ]);
 
     if (!cart) {
       return res.status(400).json({
@@ -170,9 +148,8 @@ const createPayment = async (req, res) => {
       },
       auto_return: "approved",
       binary_mode: true,
-      notification_url:
-        // "https://d05b-2800-810-48a-cc1-6cf8-6cc4-1d89-b331.sa.ngrok.io/api/order/notification",
-        "https://e-commerce-backend-production-e980.up.railway.app/api/notification",
+      notification_url: `https://84db-2800-810-48a-cc1-b950-ea98-3ad7-2baf.sa.ngrok.io/api/order/notification/?owner=${cart.owner.id}`,
+      // "https://e-commerce-backend-production-e980.up.railway.app/api/notification",
     };
 
     const { body } = await mercadopago.preferences.create(preference);
@@ -189,6 +166,17 @@ const createPayment = async (req, res) => {
 
 const notification = async (req, res) => {
   const { query } = req;
+  const { owner } = req.query;
+
+  const user = await User.findById(owner).populate({
+    path: "cart",
+    populate: {
+      path: "items",
+      populate: {
+        path: "item",
+      },
+    },
+  });
 
   const topic = query.topic;
 
@@ -221,7 +209,22 @@ const notification = async (req, res) => {
   });
 
   if (paidAmount >= body?.total_amount) {
-    createMPOrder(merchand_order);
+    if (body?.payments) {
+      createOrder(body?.payments[0].id, user);
+
+      sendEmail(user);
+
+      let update = user.cart.items.map((item) => {
+        return {
+          updateOne: {
+            filter: { _id: item.item._id },
+            update: { $inc: { stock: -item.quantity } },
+          },
+        };
+      });
+      await Product.bulkWrite(update, {});
+    }
+
     res.status(200).json({
       msg: "orden creada correctamente",
     });

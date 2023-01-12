@@ -1,24 +1,34 @@
-const createMPOrder = async (order, user) => {
-  const { paid_amount, items, collector, order_status } = order.response;
+import axios from "axios";
+import Order from "../models/orderSchema.js";
 
-  console.log(collector);
-  console.log(paid_amount);
-  console.log(items);
+const createOrder = async (orderId, user) => {
   try {
-    const newOrder = {
-      name: collector.nickname,
-      products: items,
-      paymentMethod: "Mercado Pago",
-      orderStatus: order_status,
-      orderBy: user.id
+    const config = {
+      headers: {
+        "Accept-Encoding": "application/json",
+        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+      },
+    };
 
+    const { data } = await axios.get(
+      `https://api.mercadopago.com/v1/payments/${orderId}`,
+      config
+    );
 
-
-    }
-    
+    const newOrder = await new Order({
+      firstName: data.additional_info.payer.first_name,
+      lastName: data.additional_info.payer.last_name,
+      email: data.payer.email,
+      phone: data.additional_info.payer.phone,
+      transactionAmount: data.transaction_amount,
+      orderStatus: data.status,
+      orderBy: user.id,
+      orderId: data.id,
+      products: data.additional_info.items,
+    }).save();
   } catch (error) {
-    
+    console.log(error);
   }
 };
 
-export default createMPOrder;
+export default createOrder;
