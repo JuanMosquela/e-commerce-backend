@@ -218,7 +218,10 @@ const notification = async (req, res) => {
         return {
           updateOne: {
             filter: { _id: item.item._id },
-            update: { $inc: { stock: -item.quantity } },
+            update: {
+              $inc: { stock: -item.quantity },
+              $set: { boughtBy: owner },
+            },
           },
         };
       });

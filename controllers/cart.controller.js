@@ -16,7 +16,12 @@ const getCart = async (req, res) => {
     //   },
     // });
 
-    const cart = await Cart.findOne({ owner: id });
+    const cart = await Cart.findOne({ owner: id }).populate({
+      path: "items",
+      populate: {
+        path: "item",
+      },
+    });
 
     if (!cart) {
       return res.status(400).json({

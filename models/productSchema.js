@@ -62,7 +62,12 @@ export const productSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    boughtBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
+
   { timestamps: true }
 );
 
