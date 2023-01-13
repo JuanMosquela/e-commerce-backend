@@ -15,6 +15,14 @@ const createOrder = async (orderId, user) => {
       config
     );
 
+    const reworked_items = data.additional_info.items.map((item) => {
+      return {
+        product: item.id,
+        quantity: item.quantity,
+        total: item.quantity * item.unit_price,
+      };
+    });
+
     const order = await new Order({
       firstName: data.additional_info.payer.first_name,
       lastName: data.additional_info.payer.last_name,
@@ -24,7 +32,7 @@ const createOrder = async (orderId, user) => {
       orderStatus: data.status,
       orderBy: user.id,
       orderId: data.id,
-      products: data.additional_info.items,
+      products: reworked_items,
     }).save();
 
     user.orders.push(order);

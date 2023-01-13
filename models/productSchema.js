@@ -52,7 +52,7 @@ export const productSchema = new Schema(
     branch: {
       type: String,
       required: true,
-    },    
+    },
     numReviews: {
       type: Number,
       default: 0,

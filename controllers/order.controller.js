@@ -148,7 +148,7 @@ const createPayment = async (req, res) => {
       },
       auto_return: "approved",
       binary_mode: true,
-      notification_url: `https://84db-2800-810-48a-cc1-b950-ea98-3ad7-2baf.sa.ngrok.io/api/order/notification/?owner=${cart.owner.id}`,
+      notification_url: `https://5db5-2800-810-48a-cc1-49d4-99e4-8654-6334.sa.ngrok.io/api/order/notification/?owner=${cart.owner.id}`,
       // "https://e-commerce-backend-production-e980.up.railway.app/api/notification",
     };
 

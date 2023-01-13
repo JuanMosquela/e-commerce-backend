@@ -6,26 +6,26 @@ const getCart = async (req, res) => {
   const id = req.user._id;
 
   try {
-    const user = await User.findById(id).populate({
-      path: "cart",
-      populate: {
-        path: "items",
-        populate: {
-          path: "item",
-        },
-      },
-    });
+    // const user = await User.findById(id).populate({
+    //   path: "cart",
+    //   populate: {
+    //     path: "items",
+    //     populate: {
+    //       path: "item",
+    //     },
+    //   },
+    // });
 
     const cart = await Cart.findOne({ owner: id });
 
-    if (!user.cart) {
+    if (!cart) {
       return res.status(400).json({
         msg: "Este usuario no tiene un carrito",
       });
     }
 
     res.status(200).json({
-      result: user.cart,
+      result: cart,
     });
   } catch (error) {
     res.status(400).json({
