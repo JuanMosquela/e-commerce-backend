@@ -220,7 +220,7 @@ const notification = async (req, res) => {
             filter: { _id: item.item._id },
             update: {
               $inc: { stock: -item.quantity },
-              $set: { boughtBy: owner },
+              $addToSet: { boughtBy: owner },
             },
           },
         };
