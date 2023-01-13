@@ -5,9 +5,18 @@ const getUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findById(id)
-      .populate("products")
-      .populate("favorites");
+    const user = await User.findById(id).populate([
+      {
+        path: "cart",
+        populate: {
+          path: "items",
+          populate: {
+            path: "item",
+          },
+        },
+      },
+      "orders",
+    ]);
 
     if (!user) {
       return res.status(400).json({

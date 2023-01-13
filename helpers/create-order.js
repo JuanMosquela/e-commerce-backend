@@ -15,7 +15,7 @@ const createOrder = async (orderId, user) => {
       config
     );
 
-    const newOrder = await new Order({
+    const order = await new Order({
       firstName: data.additional_info.payer.first_name,
       lastName: data.additional_info.payer.last_name,
       email: data.payer.email,
@@ -26,6 +26,10 @@ const createOrder = async (orderId, user) => {
       orderId: data.id,
       products: data.additional_info.items,
     }).save();
+
+    user.orders.push(order);
+
+    await user.save();
   } catch (error) {
     console.log(error);
   }

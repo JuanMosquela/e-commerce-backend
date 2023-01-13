@@ -73,7 +73,7 @@ const signInUser = async (req, res) => {
   if (req.body.aud) {
     const { name, email, picture, password } = req.body;
 
-    const userInDB = User.findOne({ email }).populate("products");
+    const userInDB = User.findOne({ email });
 
     const user = {
       name,
@@ -94,15 +94,18 @@ const signInUser = async (req, res) => {
     });
   } else {
     try {
-      const user = await User.findOne({ email: req.body.email }).populate({
-        path: "cart",
-        populate: {
-          path: "items",
+      const user = await User.findOne({ email: req.body.email }).populate([
+        "orders",
+        {
+          path: "cart",
           populate: {
-            path: "item",
+            path: "items",
+            populate: {
+              path: "item",
+            },
           },
         },
-      });
+      ]);
 
       if (!user.state) {
         return res.status(400).json({ msg: "This user has been deleted" });

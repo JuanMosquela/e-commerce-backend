@@ -3,27 +3,24 @@ import Product from "../models/productSchema.js";
 import User from "../models/userSchema.js";
 
 const getCart = async (req, res) => {
-  const id = req.user._id;
+  const owner = req.user._id;
 
   try {
-    const user = await User.findById(id).populate({
-      path: "cart",
+    const cart = await Cart.findOne({ owner }).populate({
+      path: "items",
       populate: {
-        path: "items",
-        populate: {
-          path: "item",
-        },
+        path: "item",
       },
     });
 
-    if (!user.cart) {
+    if (!cart) {
       return res.status(400).json({
-        msg: "Este usuario no tiene un carrito",
+        msg: `No se encontro un carrito con el id ${owner}`,
       });
     }
 
     res.status(200).json({
-      result: user.cart,
+      result: cart,
     });
   } catch (error) {
     res.status(400).json({

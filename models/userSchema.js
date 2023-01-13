@@ -52,6 +52,7 @@ const userSchema = new Schema(
       default: true,
     },
     favorites: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
     products: [
       {
         type: Schema.Types.ObjectId,
