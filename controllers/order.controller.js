@@ -60,11 +60,6 @@ import sendEmail from "../helpers/send-email.js";
 
 //
 
-//     // cart.items = [];
-//     // cart.subTotal = 0;
-//     // cart.totalQty = 0;
-
-//     // await cart.save();
 //     res.status(200).json(order);
 //   } catch (error) {
 //     res.status(400).json(error);
@@ -177,6 +172,8 @@ const notification = async (req, res) => {
     },
   });
 
+  const cart = await Cart.findById(owner);
+
   const topic = query.topic;
 
   let merchand_order;
@@ -224,6 +221,13 @@ const notification = async (req, res) => {
           },
         };
       });
+
+      cart.items = [];
+      cart.subTotal = 0;
+      cart.totalQty = 0;
+
+      await cart.save();
+
       await Product.bulkWrite(update, {});
     }
 
