@@ -38,6 +38,11 @@ const createOrder = async (orderId, user) => {
     user.orders.push(order);
 
     await user.save();
+
+    console.log(order);
+    console.log(order.orderId);
+
+    return order.orderId;
   } catch (error) {
     console.log(error);
   }
