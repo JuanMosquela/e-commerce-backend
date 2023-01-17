@@ -4,10 +4,47 @@ import User from "../models/userSchema.js";
 
 const getAllProducts = async (req, res) => {
   try {
-    const [total, products] = await Promise.all([
-      await Product.countDocuments({ state: true }),
-      await Product.find({ state: true }),
-    ]);
+    const { category, branch, rating, max_price, min_price, sort } = req.query;
+
+    //Filtering
+    const max = parseInt(max_price);
+    const min = parseInt(min_price);
+
+    let queryObj = {};
+    // const excludeFields = ['page', 'sort']
+    // excludeFields.forEach(field => queryObj[field])
+
+    if (category) {
+      queryObj.category = category;
+    }
+
+    if (branch) {
+      queryObj.branch = branch.toLowerCase();
+    }
+
+    if (rating) {
+      queryObj.rating = rating;
+    }
+
+    if (max_price && min_price) {
+      queryObj.price = { $gte: min, $lte: max };
+    }
+
+    console.log({ ...queryObj });
+
+    let products = await Product.find({ ...queryObj });
+
+    //Sorting
+
+    if (sort) {
+      const sortBy = sort.split(",").join(" ");
+      console.log(sortBy);
+
+      products.sort({ price: -1 });
+      console.log(products);
+    }
+
+    console.log(products);
 
     res.status(200).json({
       products,
