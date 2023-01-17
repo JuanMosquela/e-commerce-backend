@@ -4,47 +4,72 @@ import User from "../models/userSchema.js";
 
 const getAllProducts = async (req, res) => {
   try {
-    const { category, branch, rating, max_price, min_price, sort } = req.query;
+    // const { category, branch, rating, max_price, min_price, sort } = req.query;
 
-    //Filtering
-    const max = parseInt(max_price);
-    const min = parseInt(min_price);
+    // //Filtering
+    // const max = parseInt(max_price);
+    // const min = parseInt(min_price);
 
-    let queryObj = {};
-    // const excludeFields = ['page', 'sort']
-    // excludeFields.forEach(field => queryObj[field])
+    // let queryObj = {};
+    // // const excludeFields = ['page', 'sort']
+    // // excludeFields.forEach(field => queryObj[field])
 
-    if (category) {
-      queryObj.category = category;
-    }
+    // if (category) {
+    //   queryObj.category = category;
+    // }
 
-    if (branch) {
-      queryObj.branch = branch.toLowerCase();
-    }
+    // if (branch) {
+    //   queryObj.branch = branch.toLowerCase();
+    // }
 
-    if (rating) {
-      queryObj.rating = rating;
-    }
+    // if (rating) {
+    //   queryObj.rating = rating;
+    // }
 
-    if (max_price && min_price) {
-      queryObj.price = { $gte: min, $lte: max };
-    }
+    // if (max_price && min_price) {
+    //   queryObj.price = { $gte: min, $lte: max };
+    // }
 
-    console.log({ ...queryObj });
+    // console.log({ ...queryObj });
 
-    let products = await Product.find({ ...queryObj });
+    // let products = await Product.find({ ...queryObj });
+
+    // //Sorting
+
+    // if (sort) {
+    //   const sortBy = sort.split(",").join(" ");
+    //   console.log(sortBy);
+
+    //   products.sort({ price: -1 });
+    //   console.log(products);
+    // }
+
+    // console.log(products);
+
+    const queryObj = { ...req.query };
+    const excludeFields = ["page", "fields", "limit", "sort"];
+    excludeFields.forEach((el) => delete queryObj[el]);
+
+    let queryString = JSON.stringify(queryObj);
+
+    queryString = queryString.replace(
+      /\b(gt|gte|lt|lte)\b/g,
+      (match) => `$${match}`
+    );
+
+    let query = Product.find(JSON.parse(queryString));
 
     //Sorting
 
-    if (sort) {
-      const sortBy = sort.split(",").join(" ");
-      console.log(sortBy);
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
 
-      products.sort({ price: -1 });
-      console.log(products);
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort("-createdAt");
     }
 
-    console.log(products);
+    const products = await query;
 
     res.status(200).json({
       products,
