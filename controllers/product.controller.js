@@ -59,7 +59,7 @@ const getAllProducts = async (req, res) => {
 
     let query = Product.find(JSON.parse(queryString));
 
-    //Sorting
+    // Sorting
 
     if (req.query.sort) {
       const sortBy = req.query.sort.split(",").join(" ");
@@ -69,15 +69,29 @@ const getAllProducts = async (req, res) => {
       query = query.sort("-createdAt");
     }
 
+    // Pagination
+
+    const { page, limit } = req.query;
+    const skip = (page - 1) * limit;
+    console.log(page, limit, skip);
+
+    query = query.skip(skip).limit(limit);
+
+    if (req.query.page) {
+      const productsCount = await Product.countDocuments();
+      console.log(skip, productsCount);
+      if (skip >= productsCount) {
+        throw new Error("This page does not exist");
+      }
+    }
+
     const products = await query;
 
     res.status(200).json({
       products,
     });
   } catch (error) {
-    res.status(400).json({
-      error,
-    });
+    res.status(400).send(error);
   }
 };
 
