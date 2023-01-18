@@ -147,7 +147,7 @@ const addProduct = async (req, res) => {
 
         const savedProduct = await product.save();
 
-        userInDB.products = userInDB.products.concat(savedProduct._id);
+        userInDB.products = savedProduct._id;
 
         await userInDB.save();
 

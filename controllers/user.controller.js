@@ -16,6 +16,7 @@ const getUser = async (req, res) => {
         },
       },
       "orders",
+      "products",
     ]);
 
     if (!user) {
