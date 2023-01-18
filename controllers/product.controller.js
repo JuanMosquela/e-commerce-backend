@@ -45,15 +45,6 @@ const getAllProducts = async (req, res) => {
       delete queryObj[el];
     });
 
-    // let queryString = JSON.stringify(queryObj);
-
-    // queryString = queryString.replace(
-    //   /\b(gt|gte|lt|lte)\b/g,
-    //   (match) => `$${match}`
-    // );
-
-    // console.log(queryString);
-
     let query = Product.find(queryObj);
 
     // Sort
