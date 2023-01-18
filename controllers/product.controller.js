@@ -36,8 +36,6 @@ const getAllProducts = async (req, res) => {
       };
     }
 
-    console.log(queryObj);
-
     // const items = await Product.find(queryObj);
 
     const excludeFields = ["page", "fields", "limit", "sort"];
@@ -61,13 +59,12 @@ const getAllProducts = async (req, res) => {
 
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
-    console.log(page, limit, skip);
 
     query = query.skip(skip).limit(limit);
 
     if (req.query.page) {
       const productsCount = await Product.countDocuments();
-      console.log(skip, productsCount);
+
       if (skip >= productsCount) {
         throw new Error("This page does not exist");
       }
