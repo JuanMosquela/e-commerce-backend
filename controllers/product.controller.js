@@ -4,69 +4,66 @@ import User from "../models/userSchema.js";
 
 const getAllProducts = async (req, res) => {
   try {
-    // const { category, branch, rating, max_price, min_price, sort } = req.query;
+    // Filter
 
-    // //Filtering
-    // const max = parseInt(max_price);
-    // const min = parseInt(min_price);
+    const { category, branch, rating, max_price, min_price } = req.query;
 
-    // let queryObj = {};
-    // // const excludeFields = ['page', 'sort']
-    // // excludeFields.forEach(field => queryObj[field])
+    let minPrice = parseInt(min_price);
+    let maxPrice = parseInt(max_price);
 
-    // if (category) {
-    //   queryObj.category = category;
-    // }
+    //Filtering
 
-    // if (branch) {
-    //   queryObj.branch = branch.toLowerCase();
-    // }
+    let queryObj = {};
 
-    // if (rating) {
-    //   queryObj.rating = rating;
-    // }
+    if (category) {
+      queryObj.category = category;
+    }
 
-    // if (max_price && min_price) {
-    //   queryObj.price = { $gte: min, $lte: max };
-    // }
+    if (branch) {
+      console.log(branch);
+      queryObj.branch = branch.toLowerCase();
+    }
 
-    // console.log({ ...queryObj });
+    if (rating) {
+      queryObj.rating = rating;
+    }
 
-    // let products = await Product.find({ ...queryObj });
+    if (max_price || min_price) {
+      console.log(min_price);
+      queryObj.price = {
+        $gte: parseInt(min_price) || 0,
+        $lt: parseInt(max_price) || 50000,
+      };
+    }
 
-    // //Sorting
+    console.log(queryObj);
 
-    // if (sort) {
-    //   const sortBy = sort.split(",").join(" ");
-    //   console.log(sortBy);
+    // const items = await Product.find(queryObj);
 
-    //   products.sort({ price: -1 });
-    //   console.log(products);
-    // }
-
-    // console.log(products);
-
-    const queryObj = { ...req.query };
     const excludeFields = ["page", "fields", "limit", "sort"];
-    excludeFields.forEach((el) => delete queryObj[el]);
+    excludeFields.forEach((el) => {
+      delete queryObj[el];
+    });
 
-    let queryString = JSON.stringify(queryObj);
+    // let queryString = JSON.stringify(queryObj);
 
-    queryString = queryString.replace(
-      /\b(gt|gte|lt|lte)\b/g,
-      (match) => `$${match}`
-    );
+    // queryString = queryString.replace(
+    //   /\b(gt|gte|lt|lte)\b/g,
+    //   (match) => `$${match}`
+    // );
 
-    let query = Product.find(JSON.parse(queryString));
+    // console.log(queryString);
 
-    // Sorting
+    let query = Product.find(queryObj);
+
+    // Sort
 
     if (req.query.sort) {
       const sortBy = req.query.sort.split(",").join(" ");
 
       query = query.sort(sortBy);
     } else {
-      query = query.sort("-createdAt");
+      query = query.sort("createdAt");
     }
 
     // Pagination
