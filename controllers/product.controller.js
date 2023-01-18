@@ -60,21 +60,24 @@ const getAllProducts = async (req, res) => {
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    query = query.skip(skip).limit(limit);
+    let productsCount;
 
     if (req.query.page) {
-      const productsCount = await Product.countDocuments();
-      console.log(productsCount);
+      productsCount = await Product.countDocuments(query);
 
       if (skip >= productsCount) {
         throw new Error("This page does not exist");
       }
     }
 
+    query = query.skip(skip).limit(limit);
+
     const products = await query;
 
+    // productsCount = products.length
+
     res.status(200).json({
-      total: products.length,
+      total: productsCount || products.length,
       products,
     });
   } catch (error) {
