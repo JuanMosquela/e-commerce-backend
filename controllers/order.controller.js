@@ -8,65 +8,24 @@ import createOrder from "../helpers/create-order.js";
 import Product from "../models/productSchema.js";
 import sendEmail from "../helpers/send-email.js";
 
-// const createOrder = async (req, res) => {
-//   const { id } = req.user;
-//   const { name, adress, paymentMethod, postalCode, country } = req.body;
+const getUserOrders = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const orders = await Order.find({ orderBy: _id });
 
-//   try {
-//     const user = await User.findById(id);
+    if (!orders) {
+      return res.status(400).json({
+        msg: "no se encontro la orden",
+      });
+    }
 
-//     const cart = await Cart.findOne({ owner: user.id }).populate({
-//       path: "items",
-//       populate: {
-//         path: "item",
-//       },
-//     });
-
-//     if (!user) {
-//       return res.status(400).json({
-//         msg: "No existe este usuario",
-//       });
-//     }
-
-//     if (!cart) {
-//       return res.status(400).json({
-//         msg: "No existe este carrito",
-//       });
-//     }
-
-// let update = cart.items.map((item) => {
-//   return {
-//     updateOne: {
-//       filter: { _id: item.item._id },
-//       update: { $inc: { stock: -item.quantity } },
-//     },
-//   };
-// });
-
-// await Product.bulkWrite(update, {});
-
-//     const newOrder = new Order({
-//       products: cart.items,
-//       orderBy: user._id,
-//       orderStatus: "On Delivery",
-//       name,
-//       adress,
-//       paymentMethod,
-//       country,
-//       postalCode,
-//     });
-
-//     const order = await newOrder.save();
-
-//
-
-//     res.status(200).json(order);
-//   } catch (error) {
-//     res.status(400).json(error);
-//   }
-// };
-
-//acesstokenvendedor = TEST-2151239761844359-010513-5f9b4389ea7feba2a52fb8e0e9eae377-1276901883
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
 
 const createPayment = async (req, res) => {
   const { id } = req.params;
@@ -241,4 +200,4 @@ const notification = async (req, res) => {
   }
 };
 
-export { createOrder, createPayment, notification };
+export { getUserOrders, createPayment, notification };

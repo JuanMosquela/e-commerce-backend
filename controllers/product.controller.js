@@ -8,6 +8,8 @@ const getAllProducts = async (req, res) => {
 
     const { category, branch, rating, max_price, min_price } = req.query;
 
+    console.log(rating);
+
     let minPrice = parseInt(min_price);
     let maxPrice = parseInt(max_price);
 
@@ -24,7 +26,7 @@ const getAllProducts = async (req, res) => {
     }
 
     if (rating) {
-      queryObj.rating = rating;
+      queryObj.rating = parseInt(rating);
     }
 
     if (max_price || min_price) {
