@@ -81,7 +81,7 @@ const getAllProducts = async (req, res) => {
       products,
     });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ errorMsg: "not found" });
   }
 };
 
