@@ -165,7 +165,6 @@ const addProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   const { id } = req.params;
   const { title, category, branch, stock, description, price } = req.body;
-  const { picture } = req.files;
 
   try {
     const product = await Product.findByIdAndUpdate(
@@ -181,18 +180,23 @@ const updateProduct = async (req, res) => {
       { new: true }
     );
 
-    if (product.pictureURL) {
-      const fileArray = product.pictureURL[0].split("/");
-      const fileName = fileArray[fileArray.length - 1];
-      const [public_id] = fileName.split(".");
-      cloudinary.uploader.destroy(public_id);
+    console.log(req.files);
+
+    if (req.files) {
+      console.log("hay foto");
+      if (product.pictureURL) {
+        const fileArray = product.pictureURL[0].split("/");
+        const fileName = fileArray[fileArray.length - 1];
+        const [public_id] = fileName.split(".");
+        cloudinary.uploader.destroy(public_id);
+      }
+
+      const { tempFilePath } = req.files.picture;
+
+      const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+
+      product.pictureURL = secure_url;
     }
-
-    const { tempFilePath } = picture;
-
-    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
-
-    product.pictureURL = secure_url;
 
     await product.save();
 
