@@ -107,6 +107,8 @@ const addProduct = async (req, res) => {
   const user = req.user;
   const { picture } = req.files;
 
+  console.log(user._id);
+
   try {
     const userInDB = await User.findById(user._id);
     const productInDB = await Product.findOne({ title });
@@ -121,17 +123,9 @@ const addProduct = async (req, res) => {
     }
 
     if (picture) {
-      // const uploadRes = await cloudinary.uploader.upload(picture, {
-      //   upload_preset: "online-shop",
-      // });
-
       const { tempFilePath } = req.files.picture;
 
       const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
-
-      // const fileName = await uploadFileHelper(req.files, collection);
-
-      // model.picture = secure_url;
 
       if (secure_url) {
         const product = new Product({

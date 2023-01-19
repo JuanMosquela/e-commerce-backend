@@ -20,9 +20,11 @@ const orderSchema = new Schema(
     products: [
       {
         product: {
-          type: Schema.Types.ObjectId,
-
-          ref: "Product",
+          id: String,
+          title: String,
+          pictureURL: String,
+          price: Number,
+          quantity: Number,
         },
         quantity: Number,
         total: Number,

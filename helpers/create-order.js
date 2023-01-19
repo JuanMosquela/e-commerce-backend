@@ -16,8 +16,15 @@ const createOrder = async (orderId, user) => {
     );
 
     const reworked_items = data.additional_info.items.map((item) => {
+      console.log(item.id);
       return {
-        product: item.id,
+        product: {
+          id: item.id,
+          title: item.title,
+          pictureURL: item.picture_url,
+          price: item.unit_price,
+          quantity: item.quantity,
+        },
         quantity: item.quantity,
         total: item.quantity * item.unit_price,
       };
@@ -38,9 +45,6 @@ const createOrder = async (orderId, user) => {
     user.orders.push(order);
 
     await user.save();
-
-    console.log(order);
-    console.log(order.orderId);
 
     return order.orderId;
   } catch (error) {
