@@ -11,7 +11,12 @@ import sendEmail from "../helpers/send-email.js";
 const getUserOrders = async (req, res) => {
   const { _id } = req.user;
   try {
-    const orders = await Order.find({ orderBy: _id });
+    const orders = await Order.find({ orderBy: _id }).populate({
+      path: "products",
+      popuiate: {
+        path: "product",
+      },
+    });
 
     if (!orders) {
       return res.status(400).json({
