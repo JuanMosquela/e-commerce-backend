@@ -30,7 +30,6 @@ router.put(
   "/:id",
   [
     verifyToken,
-
     check("id", `its not a valid Mongo ID`).isMongoId(),
     check("id").custom(idExist),
     handleErrors,

@@ -20,7 +20,6 @@ const getAllProducts = async (req, res) => {
     }
 
     if (branch) {
-      console.log(branch);
       queryObj.branch = branch.toLowerCase();
     }
 
@@ -29,7 +28,6 @@ const getAllProducts = async (req, res) => {
     }
 
     if (max_price || min_price) {
-      console.log(min_price);
       queryObj.price = {
         $gte: parseInt(min_price) || 0,
         $lt: parseInt(max_price) || 50000,
@@ -81,7 +79,7 @@ const getAllProducts = async (req, res) => {
       products,
     });
   } catch (error) {
-    res.status(400).send({ errorMsg: "not found" });
+    res.status(400).send(error);
   }
 };
 
