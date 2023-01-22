@@ -70,70 +70,46 @@ const signUpUser = async (req, res) => {
 };
 
 const signInUser = async (req, res) => {
-  if (req.body.aud) {
-    const { name, email, picture, password } = req.body;
-
-    const userInDB = User.findOne({ email });
-
-    const user = {
-      name,
-      email,
-      picture,
-      password,
-    };
-
-    if (!userInDB) {
-      const user = await User.create(user);
-    }
-
-    const token = generateToken();
-
-    res.status(200).json({
-      user,
-      token,
-    });
-  } else {
-    try {
-      const user = await User.findOne({ email: req.body.email }).populate([
-        "orders",
-        {
-          path: "cart",
+  try {
+    const user = await User.findOne({ email: req.body.email }).populate([
+      "orders",
+      {
+        path: "cart",
+        populate: {
+          path: "items",
           populate: {
-            path: "items",
-            populate: {
-              path: "item",
-            },
+            path: "item",
           },
         },
-      ]);
+      },
+    ]);
 
-      if (!user.state) {
-        return res.status(400).json({ msg: "This user has been deleted" });
-      }
-
-      if (!user) {
-        return res.status(401).json({ msg: "Invalid email or password" });
-      }
-
-      //Comparar password con la password encriptada
-
-      const match = await bcrypt.compare(req.body.password, user.password);
-
-      if (!match) {
-        return res.status(401).json({ msg: "Invalid email or password" });
-      }
-
-      const { password, ...rest } = user._doc;
-
-      res.status(200).json({
-        user: rest,
-        token: generateToken(user._id),
-      });
-    } catch (error) {
-      res.status(400).json({
-        error,
-      });
+    if (!user.state) {
+      return res.status(400).json({ msg: "This user has been deleted" });
     }
+
+    if (!user) {
+      return res.status(401).json({ msg: "Invalid email or password" });
+    }
+
+    //Comparar password con la password encriptada
+
+    const match = await bcrypt.compare(req.body.password, user.password);
+
+    if (!match) {
+      return res.status(401).json({ msg: "Invalid email or password" });
+    }
+
+    const { password, ...rest } = user._doc;
+
+    res.status(200).json({
+      user: rest,
+      token: generateToken(user._id),
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
   }
 };
 
