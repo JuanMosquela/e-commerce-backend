@@ -12,6 +12,7 @@ const orderSchema = new Schema(
       type: String,
     },
     phone: Schema.Types.Mixed,
+    
     transactionAmount: Schema.Types.Mixed,
     orderId: {
       type: Number,
