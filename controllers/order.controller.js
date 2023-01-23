@@ -102,7 +102,7 @@ const createPayment = async (req, res) => {
       },
       auto_return: "approved",
       binary_mode: true,
-      notification_url: `https://fit-commerce.onrender.com/api/order/notification/?owner=${cart.owner.id}`,
+      notification_url: `https://fit-commerce-api.onrender.com/api/order/notification/?owner=${cart.owner.id}`,
     };
 
     const { body } = await mercadopago.preferences.create(preference);
