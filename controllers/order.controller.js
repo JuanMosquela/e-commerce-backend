@@ -79,7 +79,7 @@ const createPayment = async (req, res) => {
       back_urls: {
         failure: "http://localhost:3000/failure",
         pending: "http://localhost:3000",
-        success: "https://fit-commerce.onrender.com/success",
+        success: "https://fit-commerce-api.onrender.com/success",
       },
       payer: {
         phone: {
