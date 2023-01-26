@@ -1,6 +1,14 @@
 import cloudinary from "../config/cloudinary-config.js";
 import Product from "../models/productSchema.js";
 import User from "../models/userSchema.js";
+import {
+  findProductById,
+  findProductByIdAndUpdate,
+  findProductByName,
+  findTopRatedProducts,
+  removeProductById,
+} from "../services/product.service.js";
+import { findUserById } from "../services/user.service.js";
 
 const getAllProducts = async (req, res) => {
   try {
@@ -86,9 +94,9 @@ const getAllProducts = async (req, res) => {
 };
 
 const getProduct = async (req, res) => {
-  const { id } = req.params;
   try {
-    const product = await Product.findById(id).populate("owner");
+    const { id } = req.params;
+    const product = await findProductById(id);
 
     if (!product) {
       res.status(401).json({ msg: "No se encontro un producto con este id" });
@@ -110,8 +118,8 @@ const addProduct = async (req, res) => {
   console.log(user._id);
 
   try {
-    const userInDB = await User.findById(user._id);
-    const productInDB = await Product.findOne({ title });
+    const userInDB = await findUserById(user._id);
+    const productInDB = await findProductByName(title);
 
     let numberPrice = Number(price);
     let numberStock = Number(stock);
@@ -158,23 +166,9 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { title, category, branch, stock, description, price } = req.body;
 
   try {
-    const product = await Product.findByIdAndUpdate(
-      id,
-      {
-        title,
-        price,
-        category,
-        branch,
-        description,
-        stock,
-      },
-      { new: true }
-    );
-
-    console.log(req.files);
+    const product = await findProductByIdAndUpdate(req, id);
 
     if (req.files) {
       console.log("hay foto");
@@ -208,7 +202,8 @@ const removeProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const product = await Product.findByIdAndDelete(id);
+    await removeProductById(id);
+
     res.status(200).json({
       msg: "Product removed from database",
     });
@@ -222,9 +217,7 @@ const removeProduct = async (req, res) => {
 const getProductReviews = async (req, res) => {
   const { id } = req.params;
 
-  const product = await Product.findById(id);
-
-  console.log(product.reviews);
+  const product = await findProductById(id);
 
   const productReviews = product.reviews;
 
@@ -235,7 +228,11 @@ const getProductReviews = async (req, res) => {
 
 const getTopRatedProducts = async (req, res) => {
   try {
-    const products = await Product.find({ rating: 5 });
+    const products = await findTopRatedProducts();
+
+    if (!products) {
+      res.status(400).send("No top rated products found");
+    }
 
     res.status(200).json({
       results: products,
@@ -257,7 +254,7 @@ const addReview = async (req, res) => {
     comment: comment,
   };
 
-  const product = await Product.findById(id);
+  const product = await findProductById(id);
 
   const productReviewed = product.reviews.find((review) => {
     return review.user === user;

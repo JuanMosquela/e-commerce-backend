@@ -1,23 +1,17 @@
 import cloudinary from "../config/cloudinary-config.js";
 import User from "../models/userSchema.js";
+import {
+  findAllUsers,
+  findUserById,
+  findUserByIdAndDelete,
+  findUserByIdAndUpdate,
+} from "../services/user.service.js";
 
 const getUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findById(id).populate([
-      {
-        path: "cart",
-        populate: {
-          path: "items",
-          populate: {
-            path: "item",
-          },
-        },
-      },
-      "orders",
-      "products",
-    ]);
+    const user = await findUserById(id);
 
     if (!user) {
       return res.status(400).json({
@@ -39,7 +33,7 @@ const getUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ state: true });
+    const users = findAllUsers();
 
     res.status(200).json({
       users,
@@ -53,17 +47,9 @@ const getAllUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
 
   try {
-    const user = await User.findByIdAndUpdate(
-      id,
-      {
-        name,
-        email,
-      },
-      { new: true }
-    );
+    const user = await findUserByIdAndUpdate(req, id);
 
     if (req.files) {
       if (user.picture) {
@@ -96,10 +82,11 @@ const removeUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const usuario = await User.findByIdAndUpdate(id, { state: false });
+    const user = await findUserByIdAndDelete(id);
+
     res.status(200).json({
       msg: "User has been deleted",
-      usuario,
+      user,
     });
   } catch (error) {
     res.status(400).json({
@@ -111,7 +98,7 @@ const removeUser = async (req, res) => {
 const getUserFavorites = async (req, res) => {
   const { id = "" } = req.params;
   try {
-    const user = await User.findById(id).populate("favorites");
+    const user = await findUserById(id);
 
     if (!user) {
       res.status(400).json({

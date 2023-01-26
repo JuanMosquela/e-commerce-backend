@@ -7,11 +7,12 @@ import mercadopago from "../config/mercadopago-config.js";
 import createOrder from "../helpers/create-order.js";
 import Product from "../models/productSchema.js";
 import sendEmail from "../helpers/send-email.js";
+import { findOrderById } from "../services/order.service.js";
 
 const getUserOrders = async (req, res) => {
-  const { _id } = req.user;
+  const { id } = req.params;
   try {
-    const orders = await Order.find({ orderBy: _id });
+    const orders = await findOrderById(id);
 
     if (!orders) {
       return res.status(400).json({
