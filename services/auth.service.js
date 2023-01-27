@@ -33,9 +33,9 @@ const registerUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (email) => {
   try {
-    const user = await User.findOne({ email: req.body.email }).populate([
+    const user = await User.findOne({ email }).populate([
       "orders",
       {
         path: "cart",
@@ -48,25 +48,7 @@ const loginUser = async (req, res) => {
       },
     ]);
 
-    if (!user.state) {
-      return res.status(400).json({ msg: "This user has been deleted" });
-    }
-
-    if (!user) {
-      return res.status(401).json({ msg: "Invalid email or password" });
-    }
-
-    //Comparar password con la password encriptada
-
-    const match = await bcrypt.compare(req.body.password, user.password);
-
-    if (!match) {
-      return res.status(401).json({ msg: "Invalid email or password" });
-    }
-
-    const { password, ...rest } = user._doc;
-
-    return rest;
+    return user;
   } catch (error) {
     console.log(error);
     res.status(400).json({

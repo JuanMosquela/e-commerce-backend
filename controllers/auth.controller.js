@@ -19,10 +19,29 @@ const signUpUser = async (req, res) => {
 
 const signInUser = async (req, res) => {
   try {
-    const user = await loginUser(req, res);
+    const { email } = req.body;
+    const user = await loginUser(email);
+
+    if (!user.state) {
+      return res.status(400).json({ msg: "This user has been deleted" });
+    }
+
+    if (!user) {
+      return res.status(401).json({ msg: "Invalid email or password" });
+    }
+
+    //Comparar password con la password encriptada
+
+    const match = await bcrypt.compare(req.body.password, user.password);
+
+    if (!match) {
+      return res.status(401).json({ msg: "Invalid email or password" });
+    }
+
+    const { password, ...rest } = user._doc;
 
     res.status(200).json({
-      user,
+      user: rest,
       token: generateToken(user._id),
     });
   } catch (error) {
