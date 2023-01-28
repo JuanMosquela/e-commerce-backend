@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Category from "../models/categorySchema.js";
 
 const getCategories = async (req, res) => {

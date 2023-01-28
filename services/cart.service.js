@@ -1,4 +1,4 @@
-import Cart from "../models/cartSchema.JS";
+import Cart from "../models/cartSchema.js";
 
 const findCartById = async (id) => {
   try {

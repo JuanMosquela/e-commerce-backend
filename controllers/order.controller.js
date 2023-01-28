@@ -1,13 +1,11 @@
 import Cart from "../models/cartSchema.js";
-import Order from "../models/orderSchema.js";
-import User from "../models/userSchema.js";
-import createMPOrder from "../helpers/create-order.js";
 
 import mercadopago from "../config/mercadopago-config.js";
 import createOrder from "../helpers/create-order.js";
 import Product from "../models/productSchema.js";
 import sendEmail from "../helpers/send-email.js";
 import { findOrderById } from "../services/order.service.js";
+import { findCartById } from "../services/cart.service.js";
 
 const getUserOrders = async (req, res) => {
   const { id } = req.params;
@@ -45,15 +43,7 @@ const createPayment = async (req, res) => {
   } = req.body;
 
   try {
-    const cart = await Cart.findById(id).populate([
-      "owner",
-      {
-        path: "items",
-        populate: {
-          path: "item",
-        },
-      },
-    ]);
+    const cart = await findCartById(id);
 
     if (!cart) {
       return res.status(400).json({
@@ -122,15 +112,7 @@ const notification = async (req, res) => {
   const { query } = req;
   const { owner } = req.query;
 
-  const user = await User.findById(owner).populate({
-    path: "cart",
-    populate: {
-      path: "items",
-      populate: {
-        path: "item",
-      },
-    },
-  });
+  const user = await findUserById(owner);
 
   const cart = await Cart.findOne({ owner });
 

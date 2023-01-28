@@ -1,6 +1,6 @@
 import cloudinary from "../config/cloudinary-config.js";
 import Product from "../models/productSchema.js";
-import User from "../models/userSchema.js";
+
 import {
   findProductById,
   findProductByIdAndUpdate,
@@ -16,8 +16,6 @@ const getAllProducts = async (req, res) => {
 
     const { category, branch, rating, max_price, min_price } = req.query;
 
-    console.log(rating);
-
     let minPrice = parseInt(min_price);
     let maxPrice = parseInt(max_price);
 
@@ -26,7 +24,8 @@ const getAllProducts = async (req, res) => {
     let queryObj = {};
 
     if (category) {
-      queryObj.category = category;
+      let regex = new RegExp(category, "i");
+      queryObj.category = regex;
     }
 
     if (branch) {

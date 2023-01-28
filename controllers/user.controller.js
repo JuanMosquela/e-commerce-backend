@@ -1,5 +1,5 @@
 import cloudinary from "../config/cloudinary-config.js";
-import User from "../models/userSchema.js";
+
 import {
   findAllUsers,
   findUserById,

@@ -20,7 +20,7 @@ import fileUpload from "express-fileupload";
 
 // import passportSetup from "./passport.js";
 
-const app = express();
+export const app = express();
 
 const PORT = process.env.PORT || 5000;
 connectDatabase();

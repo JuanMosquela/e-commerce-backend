@@ -6,16 +6,6 @@ const getCart = async (req, res) => {
   const id = req.user._id;
 
   try {
-    // const user = await User.findById(id).populate({
-    //   path: "cart",
-    //   populate: {
-    //     path: "items",
-    //     populate: {
-    //       path: "item",
-    //     },
-    //   },
-    // });
-
     const cart = await Cart.findOne({ owner: id }).populate({
       path: "items",
       populate: {

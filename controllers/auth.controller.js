@@ -1,8 +1,6 @@
-import User from "../models/userSchema.js";
 import bcrypt from "bcrypt";
 import generateToken from "../helpers/token-validation.js";
-import axios from "axios";
-import { response } from "express";
+
 import { loginUser, registerUser } from "../services/auth.service.js";
 
 const signUpUser = async (req, res) => {
