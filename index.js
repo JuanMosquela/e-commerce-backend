@@ -8,7 +8,6 @@ import searchRouter from "./routes/search.js";
 import favoriteRouter from "./routes/favorite.js";
 import orderRouter from "./routes/order.js";
 import cartRouter from "./routes/cart.js";
-
 import cors from "cors";
 import connectDatabase from "./config/db.config.js";
 import Product from "./models/productSchema.js";
@@ -17,6 +16,8 @@ import uploadRouter from "./routes/upload.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
 import fileUpload from "express-fileupload";
+import { ApolloServer } from "apollo-server";
+import { gql } from "apollo-server";
 
 // import passportSetup from "./passport.js";
 
@@ -59,15 +60,43 @@ app.use("/api/favorites", favoriteRouter);
 app.use("/api/uploads", uploadRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
-
-app.use("/insertProducts", async (req, res) => {
-  const insertedProducts = await Product.insertMany(products);
-  res.json({
-    insertedProducts,
-  });
-});
 app.use("/api/auth", authRouter);
 
-app.listen(PORT, () => {
+// GraphQL Server
+
+export const typeDefinitions = gql`
+  type Product {
+    id: String!
+    title: String!
+    pictureURL: [String]!
+    price: String!
+    description: String
+    stock: String!
+    rating: String!
+    category: String!
+    branch: String!
+  }
+
+  type Query {
+    totalCount: Int!
+    getProducts: [Product]!
+    getProductById(id: String): Product
+  }
+`;
+
+const resolversFunctions = {
+  Query: {
+    totalCount: () => products.length,
+    getProducts: async () => await Product.find({}),
+    getProductById: async (_, { id }) => await Product.findById(id),
+  },
+};
+
+const graphqlServer = new ApolloServer({
+  typeDefs: typeDefinitions,
+  resolvers: resolversFunctions,
+});
+
+graphqlServer.listen(PORT, () => {
   console.log(`Servidor escuchando al puerto ${PORT}`);
 });
