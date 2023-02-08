@@ -1,35 +1,37 @@
-// import gql from "graphql";
-// import Product from "../models/productSchema.js";
-// import products from "../data/products.js";
-// import { ApolloServer } from "apollo-server-express";
+import Product from "../models/productSchema.js";
+import { gql, ApolloServer } from "apollo-server";
 
-// export const typeDefs = gql`
-//   type Product {
-//     id: String!
-//     title: String!
-//     pictureURL: [String]!
-//     price: Number!
-//     description: String
-//     stock: Number!
-//     rating: Number!
-//     category: String!
-//     branch: String!
-//   }
+const typeDefinitions = gql`
+  type Product {
+    id: String!
+    title: String!
+    pictureURL: [String]!
+    price: String!
+    description: String
+    stock: String!
+    rating: String!
+    category: String!
+    branch: String!
+  }
 
-//   type Query {
-//     totalCount: Int!
-//     getProducts: [Product]!
-//   }
-// `;
+  type Query {
+    totalCount: Int!
+    getProducts: [Product]!
+    getProductById(id: String): Product
+  }
+`;
 
-// export const resolvers = {
-//   Query: {
-//     totalCount: () => products.length,
-//     getProducts: () => products,
-//   },
-// };
+const resolversFunctions = {
+  Query: {
+    totalCount: async () => await Product.countDocuments(),
+    getProducts: async () => await Product.find({}),
+    getProductById: async (_, { id }) => await Product.findById(id),
+  },
+};
 
-// const graphqlServer = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-// });
+const graphqlServer = new ApolloServer({
+  typeDefs: typeDefinitions,
+  resolvers: resolversFunctions,
+});
+
+export default graphqlServer;
