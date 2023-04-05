@@ -10,17 +10,14 @@ import orderRouter from "./routes/order.js";
 import cartRouter from "./routes/cart.js";
 import cors from "cors";
 import connectDatabase from "./config/db.config.js";
-import Product from "./models/productSchema.js";
-import products from "./data/products.js";
 import uploadRouter from "./routes/upload.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
 import fileUpload from "express-fileupload";
-import graphqlServer from "./graphql/products.js";
 
 export const app = express();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 connectDatabase();
 
 // middlewares
@@ -61,6 +58,6 @@ app.use("/api/auth", authRouter);
 
 // GraphQL Server
 
-graphqlServer.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Servidor escuchando al puerto ${PORT}`);
 });

@@ -1,5 +1,6 @@
 import cloudinary from "../config/cloudinary-config.js";
 import Product from "../models/productSchema.js";
+import User from "../models/userSchema.js";
 
 import {
   findProductById,
@@ -95,13 +96,19 @@ const getAllProducts = async (req, res) => {
 const getProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await findProductById(id);
+    try {
+      const product = await Product.findById(id).populate("owner");
 
-    if (!product) {
-      res.status(401).json({ msg: "No se encontro un producto con este id" });
+      if (!product) {
+        res.status(401).json({ msg: "No se encontro un producto con este id" });
+      }
+
+      res.status(200).json({ product });
+    } catch (error) {
+      res.status(500).json({
+        error,
+      });
     }
-
-    res.status(200).json({ product });
   } catch (error) {
     res.status(500).json({
       error,
@@ -117,11 +124,17 @@ const addProduct = async (req, res) => {
   console.log(user._id);
 
   try {
-    const userInDB = await findUserById(user._id);
-    const productInDB = await findProductByName(title);
+    const userInDB = await User.findById(user._id);
+    try {
+      const productInDB = await Product.findOne({ title });
 
-    let numberPrice = Number(price);
-    let numberStock = Number(stock);
+      return productInDB;
+    } catch (error) {
+      console.log(error);
+    }
+
+    let numberPrice = parseInt(price);
+    let numberStock = parseInt(stock);
 
     if (productInDB) {
       return res.status(400).json({
@@ -167,7 +180,19 @@ const updateProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const product = await findProductByIdAndUpdate(req, id);
+    const { title, category, branch, stock, description, price } = req.body;
+    const product = await Product.findByIdAndUpdate(
+      id,
+      {
+        title,
+        price,
+        category,
+        branch,
+        description,
+        stock,
+      },
+      { new: true }
+    );
 
     if (req.files) {
       console.log("hay foto");
@@ -201,7 +226,7 @@ const removeProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await removeProductById(id);
+    await Product.findByIdAndDelete(id);
 
     res.status(200).json({
       msg: "Product removed from database",
@@ -216,7 +241,7 @@ const removeProduct = async (req, res) => {
 const getProductReviews = async (req, res) => {
   const { id } = req.params;
 
-  const product = await findProductById(id);
+  const product = await Product.findById(id);
 
   const productReviews = product.reviews;
 
@@ -227,7 +252,7 @@ const getProductReviews = async (req, res) => {
 
 const getTopRatedProducts = async (req, res) => {
   try {
-    const products = await findTopRatedProducts();
+    const products = await Product.find({ rating: 5 });
 
     if (!products) {
       res.status(400).send("No top rated products found");
@@ -253,7 +278,7 @@ const addReview = async (req, res) => {
     comment: comment,
   };
 
-  const product = await findProductById(id);
+  const product = await Product.findById(id);
 
   const productReviewed = product.reviews.find((review) => {
     return review.user === user;

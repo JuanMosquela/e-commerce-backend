@@ -1,17 +1,43 @@
 import bcrypt from "bcrypt";
 import generateToken from "../helpers/token-validation.js";
+import User from "../models/userSchema.js";
 
-import { loginUser, registerUser } from "../services/auth.service.js";
+import { loginUser } from "../services/auth.service.js";
 
 const signUpUser = async (req, res) => {
   try {
-    const user = await registerUser(req, res);
+    const { name, email, password } = req.body;
+    const findUser = await User.findOne({ email });
+
+    if (findUser) {
+      return res.status(401).json({ msg: "This user already exist" });
+    }
+
+    //encriptar la contraseña y guardarlo en db
+    const salt = bcrypt.genSaltSync();
+    const hashed_password = bcrypt.hashSync(password, salt);
+
+    const user = new User({
+      name,
+      email,
+      password: hashed_password,
+    });
+
+    await user.save();
+
+    const token = generateToken(user.id);
+    console.log(token);
+
+    console.log(user);
 
     res.status(200).json({
       user,
+      token,
     });
   } catch (error) {
-    res.status(400).json(error);
+    return res.status(500).json({
+      error,
+    });
   }
 };
 
@@ -40,7 +66,7 @@ const signInUser = async (req, res) => {
 
     res.status(200).json({
       user: rest,
-      token: generateToken(user._id),
+      token: generateToken(user.id),
     });
   } catch (error) {
     res.status(400).json({

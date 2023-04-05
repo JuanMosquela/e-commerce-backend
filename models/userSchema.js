@@ -36,7 +36,6 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, "The password is requied"],
-      unique: true,
     },
     picture: {
       type: String,
@@ -44,7 +43,7 @@ const userSchema = new Schema(
     },
     isAdmin: {
       type: Boolean,
-      required: true,
+
       default: false,
     },
     state: {
