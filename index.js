@@ -13,7 +13,9 @@ import connectDatabase from "./config/db.config.js";
 import uploadRouter from "./routes/upload.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import fileUpload from "express-fileupload";
+import passportStrategy from "./config/passport.js";
 
 export const app = express();
 
@@ -56,7 +58,23 @@ app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/auth", authRouter);
 
-// GraphQL Server
+// app.get(
+//   "/auth/google",
+//   passport.authenticate("google", { scope: ["profile"] })
+// );
+
+// app.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", {
+//     successRedirect: "/google/success",
+//     failureRedirect: "/login/failed",
+//   }),
+//   function (req, res) {
+//     // Successful authentication, redirect home.
+//     console.log(req);
+//     res.redirect("/");
+//   }
+// );
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando al puerto ${PORT}`);
