@@ -15,7 +15,6 @@ import cookieSession from "cookie-session";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import fileUpload from "express-fileupload";
-import passportStrategy from "./config/passport.js";
 
 export const app = express();
 
@@ -26,9 +25,7 @@ connectDatabase();
 
 app.use(cors());
 app.use(express.json());
-app.use(
-  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
-);
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
     name: "session",
@@ -36,8 +33,7 @@ app.use(
     maxAge: 24 * 60 * 60 * 100,
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
+
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -45,6 +41,32 @@ app.use(
     createParentPath: true,
   })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_SECRET_KEY,
+      callbackURL: "http://localhost:4000/api/auth/google/callback",
+      passReqToCallback: true,
+    },
+    function (accessToken, refreshToken, profile, callback) {
+      console.log(profile);
+      callback(null, profile);
+    }
+  )
+);
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function (obj, cb) {
+  cb(null, obj);
+});
 
 // routes
 
@@ -57,6 +79,32 @@ app.use("/api/uploads", uploadRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/auth", authRouter);
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  }),
+  function (req, res) {
+    res.redirect("/dashboard");
+  }
+);
+
+app.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/login");
+    }
+  });
+});
 
 // app.get(
 //   "/auth/google",
