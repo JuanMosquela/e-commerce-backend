@@ -43,7 +43,15 @@ const createPayment = async (req, res) => {
   } = req.body;
 
   try {
-    const cart = await findCartById(id);
+    const cart = await Cart.findById(id).populate([
+      "owner",
+      {
+        path: "items",
+        populate: {
+          path: "item",
+        },
+      },
+    ]);
 
     if (!cart) {
       return res.status(400).json({
